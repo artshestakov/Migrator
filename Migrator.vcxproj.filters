@@ -14,5 +14,16 @@
     <ClCompile Include="main.cpp">
       <Filter>System</Filter>
     </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="argparse.hpp">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="StdAfx.h">
+      <Filter>System</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
