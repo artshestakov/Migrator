@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33801.447
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Migrator", "Migrator.vcxproj", "{55AC67F3-75DE-4363-9F47-AC16DEE38167}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{55AC67F3-75DE-4363-9F47-AC16DEE38167}.Debug|Win32.ActiveCfg = Debug|Win32
+		{55AC67F3-75DE-4363-9F47-AC16DEE38167}.Debug|Win32.Build.0 = Debug|Win32
+		{55AC67F3-75DE-4363-9F47-AC16DEE38167}.Debug|x64.ActiveCfg = Debug|x64
+		{55AC67F3-75DE-4363-9F47-AC16DEE38167}.Debug|x64.Build.0 = Debug|x64
+		{55AC67F3-75DE-4363-9F47-AC16DEE38167}.Release|Win32.ActiveCfg = Release|Win32
+		{55AC67F3-75DE-4363-9F47-AC16DEE38167}.Release|Win32.Build.0 = Release|Win32
+		{55AC67F3-75DE-4363-9F47-AC16DEE38167}.Release|x64.ActiveCfg = Release|x64
+		{55AC67F3-75DE-4363-9F47-AC16DEE38167}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3077C671-401C-4904-8A96-0E15D0A80A70}
+	EndGlobalSection
+EndGlobal
