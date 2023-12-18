@@ -8,6 +8,7 @@ namespace MRConstants
     inline constexpr char PATH_SEPARATOR = '\\';
 #else
     inline constexpr char PATH_SEPARATOR = '/';
+    inline constexpr int MAX_PATH = 260;
 #endif
 
     inline constexpr size_t NPOS = std::string::npos;

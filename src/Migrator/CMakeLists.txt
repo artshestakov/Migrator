@@ -48,7 +48,11 @@ target_include_directories(Migrator PRIVATE
     ${CMAKE_BINARY_DIR}/../../utils
 )
 
-target_link_libraries(Migrator rpcrt4.lib)
+if(WIN32)
+    target_link_libraries(Migrator rpcrt4.lib)
+else()
+    target_link_libraries(Migrator uuid dl crypto)
+endif()
 
 install(TARGETS Migrator RUNTIME DESTINATION bin)
 set(CPACK_GENERATOR DEB)

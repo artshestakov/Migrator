@@ -118,7 +118,7 @@ std::string MRUtils::UuidGenerate(bool is_need_dash)
     uuid_generate(UUID);
 
     //Переводим его в строку
-    char Char[UUID_STANDART_SIZE] = { 0 };
+    char Char[MRConstants::UUID_STANDART_SIZE] = { 0 };
     uuid_unparse(UUID, Char);
     StringUID = Char;
 #endif
@@ -144,7 +144,7 @@ uint64_t MRUtils::GetTickDiff(const ISTimePoint& T)
 std::string MRUtils::GetApplicationPath()
 {
     std::string Path;
-    char Buffer[MAX_PATH] = { 0 };
+    char Buffer[MRConstants::MAX_PATH] = { 0 };
 #ifdef WIN32
     if (GetModuleFileName(GetModuleHandle(NULL), Buffer, sizeof(Buffer)) > 0)
     {

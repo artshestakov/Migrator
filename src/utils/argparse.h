@@ -1060,7 +1060,7 @@ namespace argparse {
          * @pre The object has no default value.
          * @returns The stored value if any, std::nullopt otherwise.
          */
-        template <typename T> auto present() const -> std::optional<T> {
+        /*template <typename T> auto present() const -> std::optional<T> {
             if (m_default_value.has_value()) {
                 throw std::logic_error("Argument with default value always presents");
             }
@@ -1071,7 +1071,7 @@ namespace argparse {
                 return any_cast_container<T>(m_values);
             }
             return std::any_cast<T>(m_values.front());
-        }
+        }*/
 
         template <typename T>
         static auto any_cast_container(const std::vector<std::any>& operand) -> T {
@@ -1330,10 +1330,10 @@ namespace argparse {
          * @throws std::logic_error if there is no such option
          * @throws std::bad_any_cast if the option is not of type T
          */
-        template <typename T = std::string>
+        /*template <typename T = std::string>
         auto present(std::string_view arg_name) const -> std::optional<T> {
             return (*this)[arg_name].present<T>();
-        }
+        }*/
 
         /* Getter that returns true for user-supplied options. Returns false if not
          * user-supplied, even with a default value.
@@ -1358,7 +1358,7 @@ namespace argparse {
          * Used in conjuction with Argument.operator== e.g., parser["foo"] == true
          * @throws std::logic_error in case of an invalid argument name
          */
-        Argument& operator[](std::string arg_name) const {
+        argparse::Argument& operator[](std::string arg_name) const {
             auto it = m_argument_map.find(arg_name);
             if (it != m_argument_map.end()) {
                 return *(it->second);
