@@ -1,0 +1,47 @@
+<SMD>
+
+    <Table Name="Customer" PrimaryField="FullName">
+        <Fields>
+            <Field Name="FullName" Type="TEXT"/>
+            <Field Name="Age" Type="INTEGER"/>
+        </Fields>
+    </Table>
+
+    <Table Name="User" PrimaryField="Surname">
+        <Fields>
+            <Field Name="Surname" Type="TEXT(16)"/>
+        </Fields>
+    </Table>
+
+    <Table Name="GUISystem" PrimaryField="UID">
+        <Fields>
+            <Field Name="UID" Type="TEXT(36)" NotNull="true" PrimaryKey="true"/>
+            <Field Name="Name" Type="Text" NotNull="true"/>
+        </Fields>
+        <Indexes>
+            <Index Name="guisystem_idx" Fields="UID" Unique="true"/>
+        </Indexes>
+    </Table>
+
+    <Table Name="GUISubSystem" PrimaryField="System;UID">
+        <Fields>
+            <Field Name="System" Type="TEXT(36)" NotNull="true"/>
+            <Field Name="UID" Type="TEXT(36)" NotNull="true"/>
+            <Field Name="Name" Type="TEXT" NotNull="true"/>
+            <Field Name="SomeField" Type="TEXT"/>
+        </Fields>
+        <Indexes>
+            <Index Name="guisubsystem_idx" Fields="System"/>
+        </Indexes>
+    </Table>
+
+    <View Name="Systems">
+        <![CDATA[
+            SELECT s.name AS system_name, sb.name AS subsystem_name
+            FROM guisubsystem sb
+            LEFT JOIN guisystem s ON s.uid = sb.system
+            ORDER BY system_name
+        ]]>
+    </View>
+
+</SMD>

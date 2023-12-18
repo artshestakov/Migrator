@@ -1,5 +1,5 @@
 /Bin
-/Build
+/msvc/Build
 /.vs
 
 *.vcxproj.user

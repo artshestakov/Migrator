@@ -1,0 +1,55 @@
+<!--3A3DF622FA5BBDC1F7C38B4F6F454B58CC0A26F10622869C1CE981990D1C52F6A7479D9619F8CA31E76D406A658C2AE33CA9083B70F252EB019CDEE403625264-->
+<SMD>
+
+    <Execute Name="uuid_generate_v4" Comment="Функция для генерации UID 4й версии">
+        <![CDATA[
+            CREATE OR REPLACE FUNCTION public.uuid_generate_v4()
+            RETURNS uuid LANGUAGE 'plpgsql' VOLATILE RETURNS NULL ON NULL INPUT
+            SECURITY INVOKER PARALLEL UNSAFE COST 100 AS
+            $body$
+            BEGIN
+                RETURN md5(random()::TEXT || clock_timestamp()::TEXT)::UUID;
+            END;
+            $body$;
+
+            COMMENT ON FUNCTION public.uuid_generate_v4() IS 'Генерация уникального идентификатора UID 4й версии';
+        ]]>
+    </Execute>
+
+    <Table Name="Customer" PrimaryField="ID" Comment="Клиенты">
+        <Fields>
+            <Field Name="ID" Type="UUID" DefaultValue="uuid_generate_v4()" Comment="Идентификатор"/>
+            <Field Name="CreationDate" Type="TIMESTAMP WITH TIME ZONE" DefaultValue="CURRENT_TIMESTAMP" Comment="Дата создания клиента"/>
+            <Field Name="FullName" Type="VARCHAR(64)" Comment="Полное имя клиента" NotNull="true"/>
+            <Field Name="PhoneMain" Type="VARCHAR(16)" Comment="Номер телефона - основной"/>
+            <Field Name="PhoneOther" Type="VARCHAR(16)" Comment="Номер телефона - дополнительный"/>
+            <Field Name="Address" Type="VARCHAR(128)" Comment="Адрес"/>
+            <Field Name="EMail" Type="VARCHAR(32)" Comment="Электронная почта"/>
+            <Field Name="Birthday" Type="DATE" Comment="Дата родения"/>
+        </Fields>
+    </Table>
+
+    <Table Name="CustomerDoc" PrimaryField="ID" Comment="Документы клиентов">
+        <Fields>
+            <Field Name="ID" Type="UUID" DefaultValue="uuid_generate_v4()" Comment="Идентификатор"/>
+            <Field Name="Customer" Type="UUID" Comment="Клиент"/>
+            <Field Name="Type" Type="UUID" Comment="Тип"/>
+            <Field Name="Seria" Type="VARCHAR(16)" Comment="Серия" NotNull="true"/>
+            <Field Name="Number" Type="VARCHAR(32)" Comment="Номер" NotNull="true"/>
+        </Fields>
+        <Indexes>
+            <Index Name="idx_customerdoc_customer" Fields="Customer" Comment="Пример индекса"/>
+        </Indexes>
+        <Foreigns>
+            <Foreign Name="fk_customerdoc_customer" Field="Customer" ReferenceTable="Customer" ReferenceField="ID" Comment="Ссылка на клиента"/>
+            <Foreign Name="fk_customerdoc_type" Field="Type" ReferenceTable="CustomerDocType" ReferenceField="ID" Comment="Ссылка на тип документа"/>
+        </Foreigns>
+    </Table>
+
+    <Table Name="CustomerDocType" PrimaryField="ID" Comment="Тип документа клиента">
+        <Fields>
+            <Field Name="ID" Type="UUID" DefaultValue="uuid_generate_v4()" Comment="Идентификатор"/>
+            <Field Name="Name" Type="VARCHAR(32)" Comment="Наименование"/>
+        </Fields>
+    </Table>
+</SMD>
