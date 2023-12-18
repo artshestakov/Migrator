@@ -1,5 +1,7 @@
 /Bin
 /msvc/Build
+/src/Migrator/build
+/src/Signer/build
 /.vs
 
 *.vcxproj.user
