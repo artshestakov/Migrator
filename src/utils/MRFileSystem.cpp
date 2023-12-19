@@ -1,5 +1,6 @@
 #include "MRFileSystem.h"
 #include "MRString.h"
+#include "MRContainer.h"
 //-----------------------------------------------------------------------------
 MRFileSystem::ISExtensionFilter::ISExtensionFilter()
     : ISVectorString()
@@ -64,7 +65,7 @@ std::vector<MRFileSystem::ISFileInfo> MRFileSystem::DirFiles(bool IsRecursive, c
 
                 //Учитываем фильтрацию: если расширение текущего файла не попадает в список доступных расширений - пропускаем
                 if (!Extensions.empty()
-                    /*&& !MRTemplate::VectorContains(Extensions, extension)*/) //???
+                    && !MRContainer::VectorContains(Extensions, extension))
                 {
                     continue;
                 }

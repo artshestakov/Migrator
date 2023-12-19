@@ -46,6 +46,9 @@
     <ClCompile Include="..\src\utils\argparse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\utils\MRContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\utils\MRTypedefs.h">
@@ -73,6 +76,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\utils\argparse.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utils\MRContainer.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

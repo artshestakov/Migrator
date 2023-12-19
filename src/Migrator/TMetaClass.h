@@ -1,6 +1,7 @@
 #pragma once
 //-----------------------------------------------------------------------------
 #include "MRTypedefs.h"
+#include "MRContainer.h"
 //-----------------------------------------------------------------------------
 struct TMetaTable;
 //-----------------------------------------------------------------------------
@@ -57,9 +58,8 @@ struct TMetaTable : public TMetaBase
 
     ~TMetaTable()
     {
-        //???
-        //MRTemplate::VectorDeletePtrs(Fields);
-        //MRTemplate::VectorDeletePtrs(Indexes);
+        MRContainer::VectorDeletePtrs(Fields);
+        MRContainer::VectorDeletePtrs(Indexes);
     }
 
     const TMetaField* GetField(const std::string& field_name) const

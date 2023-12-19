@@ -113,6 +113,9 @@
     <ClCompile Include="..\src\utils\argparse.cpp">
       <Filter>System</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\utils\MRContainer.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Migrator\IDatabase.h">
@@ -200,6 +203,9 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="..\src\utils\argparse.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utils\MRContainer.h">
       <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>

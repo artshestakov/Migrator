@@ -6,9 +6,10 @@ namespace MRConstants
 {
 #ifdef WIN32
     inline constexpr char PATH_SEPARATOR = '\\';
+    inline constexpr int MAX_PATH_ = MAX_PATH;
 #else
     inline constexpr char PATH_SEPARATOR = '/';
-    inline constexpr int MAX_PATH = 260;
+    inline constexpr int MAX_PATH_ = 260;
 #endif
 
     inline constexpr size_t NPOS = std::string::npos;

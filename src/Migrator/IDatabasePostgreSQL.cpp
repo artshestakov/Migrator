@@ -5,6 +5,7 @@
 #include "MRMetaData.h"
 #include "MRTemplate.h"
 #include "MRConstants.h"
+#include "MRContainer.h"
 //-----------------------------------------------------------------------------
 IDatabasePostgreSQL::IDatabasePostgreSQL(DatabaseType database_type)
     : IDatabase(database_type),
@@ -540,7 +541,7 @@ bool IDatabasePostgreSQL::ViewUpdate(const TMetaView* meta_view)
 void IDatabasePostgreSQL::GetOldObjects(const std::vector<ShowOldType>& v, IDatabase::ShowOldStruct& s, std::optional<std::string>& error_string)
 {
     //Вытаскиваем таблицы
-    if (MRTemplate::VectorContains(v, IDatabase::ShowOldType::Tables))
+    if (MRContainer::VectorContains(v, IDatabase::ShowOldType::Tables))
     {
         MRQuery q(this, "SELECT tablename FROM pg_tables WHERE schemaname = current_schema() ORDER BY tablename");
         if (q.Execute())
@@ -562,7 +563,7 @@ void IDatabasePostgreSQL::GetOldObjects(const std::vector<ShowOldType>& v, IData
     }
 
     //Вытаскиваем поля
-    if (MRTemplate::VectorContains(v, IDatabase::ShowOldType::Fields))
+    if (MRContainer::VectorContains(v, IDatabase::ShowOldType::Fields))
     {
         MRQuery q(this, "SELECT table_name, column_name FROM information_schema.columns WHERE table_schema = current_schema() ORDER BY table_name, ordinal_position");
         if (q.Execute())
@@ -589,7 +590,7 @@ void IDatabasePostgreSQL::GetOldObjects(const std::vector<ShowOldType>& v, IData
     }
 
     //Вытаскиваем представления
-    if (MRTemplate::VectorContains(v, IDatabase::ShowOldType::Views))
+    if (MRContainer::VectorContains(v, IDatabase::ShowOldType::Views))
     {
         MRQuery q(this, "SELECT viewname FROM pg_catalog.pg_views WHERE schemaname = current_schema() ORDER BY viewname");
         if (q.Execute())
@@ -611,7 +612,7 @@ void IDatabasePostgreSQL::GetOldObjects(const std::vector<ShowOldType>& v, IData
     }
 
     //Вытаскиваем индексы
-    if (MRTemplate::VectorContains(v, IDatabase::ShowOldType::Indexes))
+    if (MRContainer::VectorContains(v, IDatabase::ShowOldType::Indexes))
     {
         MRQuery q(this, "SELECT indexname "
             "FROM pg_indexes "
@@ -637,7 +638,7 @@ void IDatabasePostgreSQL::GetOldObjects(const std::vector<ShowOldType>& v, IData
     }
 
     //Вытаскиваем внешние ключи
-    if (MRTemplate::VectorContains(v, IDatabase::ShowOldType::Foreigns))
+    if (MRContainer::VectorContains(v, IDatabase::ShowOldType::Foreigns))
     {
         MRQuery q(this, "SELECT conname FROM pg_constraint WHERE contype = 'f' AND connamespace = current_schema()::regnamespace ORDER BY conname");
         if (q.Execute())

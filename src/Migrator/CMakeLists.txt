@@ -35,6 +35,7 @@ add_executable(Migrator
     TMetaClass.cpp
     ../utils/argparse.cpp
     ../utils/MRConstants.cpp
+    ../utils/MRContainer.cpp
     ../utils/MRCrypt.cpp
     ../utils/MRDateTime.cpp
     ../utils/MRFileSystem.cpp

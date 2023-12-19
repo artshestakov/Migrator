@@ -202,6 +202,7 @@
     <ClCompile Include="..\src\Migrator\TMetaClass.cpp" />
     <ClCompile Include="..\src\utils\argparse.cpp" />
     <ClCompile Include="..\src\utils\MRConstants.cpp" />
+    <ClCompile Include="..\src\utils\MRContainer.cpp" />
     <ClCompile Include="..\src\utils\MRCrypt.cpp" />
     <ClCompile Include="..\src\utils\MRDateTime.cpp" />
     <ClCompile Include="..\src\utils\MRFileSystem.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="..\src\Migrator\TMetaClass.h" />
     <ClInclude Include="..\src\utils\argparse.h" />
     <ClInclude Include="..\src\utils\MRConstants.h" />
+    <ClInclude Include="..\src\utils\MRContainer.h" />
     <ClInclude Include="..\src\utils\MRCrypt.h" />
     <ClInclude Include="..\src\utils\MRDateTime.h" />
     <ClInclude Include="..\src\utils\MRFileSystem.h" />

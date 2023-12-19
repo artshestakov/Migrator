@@ -8,6 +8,7 @@
 #include "MRConstants.h"
 #include "MRFileSystem.h"
 #include "MRString.h"
+#include "MRContainer.h"
 //-----------------------------------------------------------------------------
 IDatabaseSQLite::IDatabaseSQLite(DatabaseType database_type)
     : IDatabase(database_type),
@@ -426,7 +427,7 @@ bool IDatabaseSQLite::ViewUpdate(const TMetaView* meta_view)
 void IDatabaseSQLite::GetOldObjects(const std::vector<ShowOldType>& v, IDatabase::ShowOldStruct& s, std::optional<std::string>& error_string)
 {
     //Вытаскиваем таблицы
-    if (MRTemplate::VectorContains(v, IDatabase::ShowOldType::Tables))
+    if (MRContainer::VectorContains(v, IDatabase::ShowOldType::Tables))
     {
         MRQuery q(this, "SELECT name FROM sqlite_master WHERE lower(type) = 'table' ORDER BY name");
         if (q.Execute())
@@ -448,7 +449,7 @@ void IDatabaseSQLite::GetOldObjects(const std::vector<ShowOldType>& v, IDatabase
     }
 
     //Вытаскиваем поля
-    if (MRTemplate::VectorContains(v, IDatabase::ShowOldType::Fields))
+    if (MRContainer::VectorContains(v, IDatabase::ShowOldType::Fields))
     {
         MRQuery qTables(this, "SELECT name FROM sqlite_master WHERE lower(type) = 'table' ORDER BY name");
         if (qTables.Execute())
@@ -487,7 +488,7 @@ void IDatabaseSQLite::GetOldObjects(const std::vector<ShowOldType>& v, IDatabase
     }
 
     //Вытаскиваем представления
-    if (MRTemplate::VectorContains(v, IDatabase::ShowOldType::Views))
+    if (MRContainer::VectorContains(v, IDatabase::ShowOldType::Views))
     {
         MRQuery q(this, "SELECT name FROM sqlite_master WHERE lower(type) = 'view' ORDER BY name");
         if (q.Execute())
@@ -509,7 +510,7 @@ void IDatabaseSQLite::GetOldObjects(const std::vector<ShowOldType>& v, IDatabase
     }
 
     //Вытаскиваем индексы
-    if (MRTemplate::VectorContains(v, IDatabase::ShowOldType::Indexes))
+    if (MRContainer::VectorContains(v, IDatabase::ShowOldType::Indexes))
     {
         MRQuery q(this, "SELECT name FROM sqlite_master WHERE lower(type) = 'index' AND lower(name) NOT LIKE '%sqlite_autoindex%' ORDER BY name");
         if (q.Execute())

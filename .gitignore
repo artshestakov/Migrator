@@ -1,4 +1,5 @@
 /Bin
+/build
 /msvc/Build
 /src/Migrator/build
 /src/Signer/build

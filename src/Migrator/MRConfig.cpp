@@ -481,7 +481,7 @@ bool MRConfig::Update()
         for (const MRConfigParameterBase* Parameter : Section->GetParameters()) //Обходим параметры
         {
             //Такого ключа в текущем конфигурационном файле нет - добавляем
-            if (!MRTemplate::VectorContains(TempKeys, Section->GetName() + '/' + Parameter->GetName()))
+            if (!MRContainer::VectorContains(TempKeys, Section->GetName() + '/' + Parameter->GetName()))
             {
                 std::string DefaultValue = Parameter->GetDefaultValue();
                 const char* comment = Parameter->GetComment().empty() ? nullptr : Parameter->GetComment().c_str();

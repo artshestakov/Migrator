@@ -144,7 +144,7 @@ uint64_t MRUtils::GetTickDiff(const ISTimePoint& T)
 std::string MRUtils::GetApplicationPath()
 {
     std::string Path;
-    char Buffer[MRConstants::MAX_PATH] = { 0 };
+    char Buffer[MRConstants::MAX_PATH_] = { 0 };
 #ifdef WIN32
     if (GetModuleFileName(GetModuleHandle(NULL), Buffer, sizeof(Buffer)) > 0)
     {

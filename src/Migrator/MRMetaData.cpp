@@ -13,9 +13,9 @@ MRMetaData::MRMetaData()
 //-----------------------------------------------------------------------------
 MRMetaData::~MRMetaData()
 {
-    MRTemplate::VectorDeletePtrs(m_Executes);
-    MRTemplate::VectorDeletePtrs(m_Tables);
-    MRTemplate::VectorDeletePtrs(m_Views);
+    MRContainer::VectorDeletePtrs(m_Executes);
+    MRContainer::VectorDeletePtrs(m_Tables);
+    MRContainer::VectorDeletePtrs(m_Views);
 }
 //-----------------------------------------------------------------------------
 MRMetaData& MRMetaData::Instance()
@@ -60,7 +60,7 @@ std::optional<const TMetaTable*> MRMetaData::TakeMetaTable(const std::string& ta
     {
         if (meta_table->Name == table_name)
         {
-            return MRTemplate::VectorTake(m_Tables, meta_table);
+            return MRContainer::VectorTake(m_Tables, meta_table);
         }
     }
     return nullptr;
@@ -353,7 +353,7 @@ bool MRMetaData::InitFields(TMetaTable* meta_table, tinyxml2::XMLElement* xml_fi
             MRTemplate::GetAttributeXML(meta_field->Comment, "Comment", xml_first_field, false, false);
 
             //Выставляем принудительно true только в том случае, когда поля является часть первичного ключа
-            if (MRTemplate::VectorContains(meta_table->PrimaryFields, meta_field->Name))
+            if (MRContainer::VectorContains(meta_table->PrimaryFields, meta_field->Name))
             {
                 meta_field->NotNull = true;
             }
