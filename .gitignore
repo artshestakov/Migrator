@@ -6,3 +6,4 @@
 /.vs
 
 *.vcxproj.user
+CMakeLists.txt.user
