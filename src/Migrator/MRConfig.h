@@ -106,6 +106,7 @@ public:
 
     const std::string& GetErrorString() const;
     const std::string& GetFilePath() const;
+    bool GetIsFirstInit() const;
     bool IsValid(); //Проверить корректность заполнения конфигурационного файла
     bool IsEmpty(const std::string& SectionName, const std::string& ParameterName);
     bool Initialize(const std::string& file_name);
@@ -153,5 +154,6 @@ private:
     CSimpleIni SimpleINI;
     ISCriticalSection CriticalSection;
     MRDateTime DTWrite; //Дата и время последней записи файла
+    bool m_IsFirstInit;
 };
 //-----------------------------------------------------------------------------

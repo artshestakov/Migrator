@@ -45,10 +45,14 @@ bool MRUtils::InitConfig()
         return false;
     }
 
-    if (!MRConfig::Instance().IsValid())
+    //Проверяем валидность только когда конфигурационный файл уже был создан
+    if (!MRConfig::Instance().GetIsFirstInit())
     {
-        MR_LOG.Log("Config file is not valid: %s", MRConfig::Instance().GetErrorString().c_str());
-        return false;
+        if (!MRConfig::Instance().IsValid())
+        {
+            MR_LOG.Log("Config file is not valid: %s", MRConfig::Instance().GetErrorString().c_str());
+            return false;
+        }
     }
     return true;
 }

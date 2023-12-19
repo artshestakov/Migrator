@@ -263,11 +263,17 @@ private:
 
     ~MRDefSingleton()
     {
-        delete SQLite;
-        delete PostgreSQL;
+        if (SQLite)
+        {
+            delete SQLite;
+            SQLite = nullptr;
+        }
 
-        SQLite = nullptr;
-        PostgreSQL = nullptr;
+        if (PostgreSQL)
+        {
+            delete PostgreSQL;
+            PostgreSQL = nullptr;
+        }
     }
 
     template <typename T> struct type_false : std::false_type {};
@@ -293,6 +299,7 @@ private:
             {
                 static_assert(type_false<T>::value, "Not support template type");
             }
+
             m_Initialized = true;
             return true;
         }

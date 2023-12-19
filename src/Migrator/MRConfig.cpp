@@ -206,7 +206,8 @@ void ISConfigSection::AddBool(const std::string& name, bool default_value, bool 
 }
 //-----------------------------------------------------------------------------
 MRConfig::MRConfig()
-    : ErrorString("No error")
+    : ErrorString("No error"),
+    m_IsFirstInit(false)
 {
     CRITICAL_SECTION_INIT(&CriticalSection);
 }
@@ -236,6 +237,11 @@ const std::string& MRConfig::GetErrorString() const
 const std::string& MRConfig::GetFilePath() const
 {
     return PathConfigFile;
+}
+//-----------------------------------------------------------------------------
+bool MRConfig::GetIsFirstInit() const
+{
+    return m_IsFirstInit;
 }
 //-----------------------------------------------------------------------------
 bool MRConfig::IsValid()
@@ -331,6 +337,7 @@ bool MRConfig::IsEmpty(const std::string& SectionName, const std::string& Parame
 bool MRConfig::Initialize(const std::string& file_name)
 {
     PathConfigFile = MRUtils::GetApplicationDir() + MRConstants::PATH_SEPARATOR + file_name + ".ini";
+    m_IsFirstInit = !MRFileSystem::FileExist(PathConfigFile);
     return MRFileSystem::FileExist(PathConfigFile) ? Update() : Create();
 }
 //-----------------------------------------------------------------------------
