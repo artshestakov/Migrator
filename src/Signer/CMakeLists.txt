@@ -29,6 +29,12 @@ target_include_directories(Signer PRIVATE
     ${CMAKE_BINARY_DIR}/../../utils
 )
 
+if(WIN32)
+    target_link_libraries(Signer rpcrt4.lib)
+else()
+    target_link_libraries(Signer crypto)
+endif()
+
 install(TARGETS Signer RUNTIME DESTINATION bin)
 set(CPACK_GENERATOR DEB)
 set(CPACK_PACKAGE_FILE_NAME "Signer")
