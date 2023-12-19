@@ -246,6 +246,11 @@
   <ItemGroup>
     <ResourceCompile Include="Migrator.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\resources\PostgreSQL.smd" />
+    <None Include="..\resources\SQLite.smd" />
+    <None Include="..\resources\Template.smd" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
