@@ -1,0 +1,3 @@
+[submodule "LibraryExt"]
+	path = LibraryExt
+	url = https://github.com/artshestakov/LibraryExt
