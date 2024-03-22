@@ -144,15 +144,15 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(SolutionDir)LibraryExt\ISCore;$(SolutionDir)src_share</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)LibraryExt\ISCore;$(SolutionDir)LibraryExt\ISDatabase;$(SolutionDir)src_share</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
-      <AdditionalDependencies>ISCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)LibraryExt\ISCore\$(Configuration)-$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ISCore.lib;ISDatabase.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)LibraryExt\ISCore\$(Configuration)-$(Platform);$(SolutionDir)LibraryExt\ISDatabase\$(Configuration)-$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -165,7 +165,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(SolutionDir)LibraryExt\ISCore;$(SolutionDir)src_share</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)LibraryExt\ISCore;$(SolutionDir)LibraryExt\ISDatabase;$(SolutionDir)src_share</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -174,8 +174,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
-      <AdditionalDependencies>ISCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)LibraryExt\ISCore\$(Configuration)-$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ISCore.lib;ISDatabase.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)LibraryExt\ISCore\$(Configuration)-$(Platform);$(SolutionDir)LibraryExt\ISDatabase\$(Configuration)-$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -186,15 +186,15 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(SolutionDir)LibraryExt\ISCore;$(SolutionDir)src_share</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)LibraryExt\ISCore;$(SolutionDir)LibraryExt\ISDatabase;$(SolutionDir)src_share</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
-      <AdditionalDependencies>ISCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)LibraryExt\ISCore\$(Configuration)-$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ISCore.lib;ISDatabase.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)LibraryExt\ISCore\$(Configuration)-$(Platform);$(SolutionDir)LibraryExt\ISDatabase\$(Configuration)-$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -207,7 +207,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(SolutionDir)LibraryExt\ISCore;$(SolutionDir)src_share</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)LibraryExt\ISCore;$(SolutionDir)LibraryExt\ISDatabase;$(SolutionDir)src_share</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -216,8 +216,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
-      <AdditionalDependencies>ISCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)LibraryExt\ISCore\$(Configuration)-$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ISCore.lib;ISDatabase.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)LibraryExt\ISCore\$(Configuration)-$(Platform);$(SolutionDir)LibraryExt\ISDatabase\$(Configuration)-$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
