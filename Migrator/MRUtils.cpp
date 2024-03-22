@@ -79,24 +79,6 @@ void MRUtils::PrintOldObjects(const IDatabase::ShowOldStruct& s)
     MRUtils::PrintOldObjects(s.Foreigns, "Foreigns");
 }
 //-----------------------------------------------------------------------------
-bool MRUtils::InstallEncoding(unsigned int code_page, std::string* error_string)
-{
-#if defined(WIN32) && defined(DEBUG)
-    if (SetConsoleOutputCP(code_page) == FALSE) //Не удалось установить кодовую страницу
-    {
-        if (error_string)
-        {
-            *error_string = ISAlgorithm::GetLastErrorS();
-        }
-        return false;
-    }
-#else //Реализации под Linux не существует
-    (void)code_page;
-    (void)error_string;
-#endif
-    return true;
-}
-//-----------------------------------------------------------------------------
 void MRUtils::PrintOldObjects(const ISVectorString& v, const std::string& title)
 {
     MR_LOG.LogWH("");

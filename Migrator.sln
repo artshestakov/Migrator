@@ -10,8 +10,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projects", "Projects", "{6E450EB2-AC92-4EDE-8563-B99FD4C8D316}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Migrator", "Migrator\Migrator.vcxproj", "{55AC67F3-75DE-4363-9F47-AC16DEE38167}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23417504-DDF5-47E3-A6F6-55D58230CA58} = {23417504-DDF5-47E3-A6F6-55D58230CA58}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Signer", "Signer\Signer.vcxproj", "{31506FAB-0910-4E79-99D1-EB7C0CA673A8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23417504-DDF5-47E3-A6F6-55D58230CA58} = {23417504-DDF5-47E3-A6F6-55D58230CA58}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -3,6 +3,7 @@
 #include "MRUtils.h"
 #include "MRMigrator.h"
 #include "MRLogger.h"
+#include "ISConsole.h"
 //-----------------------------------------------------------------------------
 int main(int argc, char** argv)
 {
@@ -15,7 +16,7 @@ int main(int argc, char** argv)
 
     //Установим кодировку
     std::string e;
-    if (!MRUtils::InstallEncoding(65001, &e))
+    if (!ISConsole::InstallEncoding(65001, &e))
     {
         MR_LOG.Log("Cannot changed console encoding: %s", e.c_str());
     }

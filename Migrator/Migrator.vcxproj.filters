@@ -62,9 +62,6 @@
     <ClCompile Include="MRMigrator.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="MRSQLProcessor.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
     <ClCompile Include="MRTemplate.cpp">
       <Filter>System</Filter>
     </ClCompile>
@@ -73,6 +70,9 @@
     </ClCompile>
     <ClCompile Include="..\src_share\MRConstants.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="MRSQLProcessor.cpp">
+      <Filter>Database</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,9 +115,6 @@
     <ClInclude Include="MRMigrator.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="MRSQLProcessor.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="MRTemplate.h">
       <Filter>System</Filter>
     </ClInclude>
@@ -126,6 +123,9 @@
     </ClInclude>
     <ClInclude Include="..\src_share\MRConstants.h">
       <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="MRSQLProcessor.h">
+      <Filter>Database</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
