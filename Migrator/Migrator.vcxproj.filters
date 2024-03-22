@@ -56,9 +56,6 @@
     <ClCompile Include="main.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="MRLogger.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
     <ClCompile Include="MRMigrator.cpp">
       <Filter>System</Filter>
     </ClCompile>
@@ -108,9 +105,6 @@
     </ClInclude>
     <ClInclude Include="MRQuery.h">
       <Filter>Query</Filter>
-    </ClInclude>
-    <ClInclude Include="MRLogger.h">
-      <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="MRMigrator.h">
       <Filter>System</Filter>

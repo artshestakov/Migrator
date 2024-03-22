@@ -29,7 +29,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MRDatabase.cpp" />
     <ClCompile Include="MRDefDatabase.cpp" />
-    <ClCompile Include="MRLogger.cpp" />
     <ClCompile Include="MRMetaData.cpp" />
     <ClCompile Include="MRMigrator.cpp" />
     <ClCompile Include="MRQuery.cpp" />
@@ -48,7 +47,6 @@
     <ClInclude Include="IQuerySQLite.h" />
     <ClInclude Include="MRDatabase.h" />
     <ClInclude Include="MRDefDatabase.h" />
-    <ClInclude Include="MRLogger.h" />
     <ClInclude Include="MRMetaData.h" />
     <ClInclude Include="MRMigrator.h" />
     <ClInclude Include="MRQuery.h" />

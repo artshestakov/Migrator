@@ -1,8 +1,8 @@
 #include "MRMetaData.h"
 #include "MRTemplate.h"
-#include "MRLogger.h"
 #include "MRUtils.h"
 #include "MRConstants.h"
+#include "ISLogger.h"
 //-----------------------------------------------------------------------------
 MRMetaData::MRMetaData()
 {
@@ -133,7 +133,7 @@ bool MRMetaData::Init(const ISVectorString& path_list)
             {
                 return false;
             }
-            MR_LOG.Log("Init SMD-file \"%s\" success for %lld msec", file_info.PathFull.c_str(), ISAlgorithm::GetTickDiff(t));
+            ISLOGGER_I(__CLASS__, "Init SMD-file \"%s\" success for %lld msec", file_info.PathFull.c_str(), ISAlgorithm::GetTickDiff(t));
             ++file_amount;
         }
 

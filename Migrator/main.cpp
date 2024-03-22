@@ -2,15 +2,15 @@
 #include "ISConfig.h"
 #include "MRUtils.h"
 #include "MRMigrator.h"
-#include "MRLogger.h"
 #include "ISConsole.h"
+#include "ISLogger.h"
 //-----------------------------------------------------------------------------
 int main(int argc, char** argv)
 {
     //Инициализируем логгер
-    if (!MRLogger::Instance().Init())
+    if (!ISLogger::Instance().Initialize(true))
     {
-        std::cout << MRLogger::Instance().GetErrorString() << std::endl;
+        std::cout << ISLogger::Instance().GetErrorString() << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -18,7 +18,7 @@ int main(int argc, char** argv)
     std::string e;
     if (!ISConsole::InstallEncoding(65001, &e))
     {
-        MR_LOG.Log("Cannot changed console encoding: %s", e.c_str());
+        ISLOGGER_W(__CLASS__, "Cannot changed console encoding: %s", e.c_str());
     }
 
     argparse::ArgumentParser args("Migrator", "1.0");
@@ -90,7 +90,7 @@ int main(int argc, char** argv)
     }
     catch (const std::runtime_error& e)
     {
-        MR_LOG.Log("Cannot parse argmuents. %s", e.what());
+        ISLOGGER_E(__CLASS__, "Cannot parse argmuents. %s", e.what());
         std::cout << std::endl << args;
         return EXIT_FAILURE;
     }

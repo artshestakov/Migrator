@@ -4,7 +4,7 @@
 #include "ISConfig.h"
 #include "MRUtils.h"
 #include "MRQuery.h"
-#include "MRLogger.h"
+#include "ISLogger.h"
 //-----------------------------------------------------------------------------
 int MRMigrator::Ping()
 {
@@ -18,7 +18,7 @@ int MRMigrator::Ping()
     MRDatabase d(db_type);
     if (!d.InitLibrary())
     {
-        MR_LOG.Log("Cannot init library \"%s\": %s", d.GetLibraryPath().c_str(), d.GetErrorString().c_str());
+        ISLOGGER_E(__CLASS__, "Cannot init library \"%s\": %s", d.GetLibraryPath().c_str(), d.GetErrorString().c_str());
         return EXIT_FAILURE;
     }
 
@@ -30,17 +30,17 @@ int MRMigrator::Ping()
 
     if (!is_exists)
     {
-        MR_LOG.Log("Database is not exists");
+        ISLOGGER_E(__CLASS__, "Database is not exists");
         return EXIT_FAILURE;
     }
 
     auto tick = ISAlgorithm::GetTick();
     if (!d.Connect())
     {
-        MR_LOG.Log("Cannot connect to database: %d", d.GetErrorString().c_str());
+        ISLOGGER_E(__CLASS__, "Cannot connect to database: %d", d.GetErrorString().c_str());
         return EXIT_FAILURE;
     }
-    MR_LOG.Log("Ping to the current database (%s) is %lld msec",
+    ISLOGGER_I(__CLASS__, "Ping to the current database (%s) is %lld msec",
         module_name.c_str(), ISAlgorithm::GetTickDiff(tick));
 
     d.Disconnect();
@@ -51,11 +51,11 @@ int MRMigrator::Validate(const ISVectorString& paths)
 {
     if (!MRMetaData::Instance().Init(paths))
     {
-        MR_LOG.Log("Meta data is not init: %s", MRMetaData::Instance().GetErrorString().c_str());
+        ISLOGGER_E(__CLASS__, "Meta data is not init: %s", MRMetaData::Instance().GetErrorString().c_str());
         return EXIT_FAILURE;
     }
 
-    MR_LOG.Log("Meta data validate success");
+    ISLOGGER_I(__CLASS__, "Meta data validate success");
     return EXIT_SUCCESS;
 }
 //-----------------------------------------------------------------------------
@@ -63,7 +63,7 @@ int MRMigrator::Update(const ISVectorString& paths)
 {
     if (!MRMetaData::Instance().Init(paths))
     {
-        MR_LOG.Log("Meta data is not init: %s", MRMetaData::Instance().GetErrorString().c_str());
+        ISLOGGER_E(__CLASS__, "Meta data is not init: %s", MRMetaData::Instance().GetErrorString().c_str());
         return EXIT_FAILURE;
     }
 
@@ -82,19 +82,19 @@ int MRMigrator::Update(const ISVectorString& paths)
     bool is_exists = false;
     if (!db.ExistsDB(is_exists))
     {
-        MR_LOG.Log(db.GetErrorString().c_str());
+        ISLOGGER_E(__CLASS__, db.GetErrorString().c_str());
         return EXIT_FAILURE;
     }
 
     if (!is_exists && !db.Create())
     {
-        MR_LOG.Log(db.GetErrorString().c_str());
+        ISLOGGER_E(__CLASS__, db.GetErrorString().c_str());
         return EXIT_FAILURE;
     }
 
     if (!db.Connect())
     {
-        MR_LOG.Log(db.GetErrorString().c_str());
+        ISLOGGER_E(__CLASS__, db.GetErrorString().c_str());
         return EXIT_FAILURE;
     }
 
@@ -103,11 +103,11 @@ int MRMigrator::Update(const ISVectorString& paths)
     {
         if (!db.Execute(meta_execute))
         {
-            MR_LOG.Log(db.GetErrorString().c_str());
+            ISLOGGER_E(__CLASS__, db.GetErrorString().c_str());
             return EXIT_FAILURE;
         }
 
-        MR_LOG.Log("Execute \"%s\" runned successfully", meta_execute->Name.c_str());
+        ISLOGGER_I(__CLASS__, "Execute \"%s\" runned successfully", meta_execute->Name.c_str());
     }
 
     //Обновляем таблицы
@@ -115,17 +115,17 @@ int MRMigrator::Update(const ISVectorString& paths)
     {
         if (!db.TableExists(meta_table, is_exists))
         {
-            MR_LOG.Log(db.GetErrorString().c_str());
+            ISLOGGER_E(__CLASS__, db.GetErrorString().c_str());
             return EXIT_FAILURE;
         }
 
         if (bool result = is_exists ? db.TableUpdate(meta_table) : db.TableCreate(meta_table); !result)
         {
-            MR_LOG.Log("Cant't create table \"%s\"\n%s",
+            ISLOGGER_E(__CLASS__, "Cant't create table \"%s\"\n%s",
                 meta_table->Name.c_str(), db.GetErrorString().c_str());
             return EXIT_FAILURE;
         }
-        MR_LOG.Log("Table \"%s\" created/updated successfully", meta_table->Name.c_str());
+        ISLOGGER_I(__CLASS__, "Table \"%s\" created/updated successfully", meta_table->Name.c_str());
     }
 
     //Обновляем индексы
@@ -133,16 +133,16 @@ int MRMigrator::Update(const ISVectorString& paths)
     {
         if (!db.IndexExists(meta_index, is_exists))
         {
-            MR_LOG.Log(db.GetErrorString().c_str());
+            ISLOGGER_E(__CLASS__, db.GetErrorString().c_str());
             return EXIT_FAILURE;
         }
 
         if (bool result = is_exists ? db.IndexUpdate(meta_index) : db.IndexCreate(meta_index); !result)
         {
-            MR_LOG.Log(db.GetErrorString().c_str());
+            ISLOGGER_E(__CLASS__, db.GetErrorString().c_str());
             return EXIT_FAILURE;
         }
-        MR_LOG.Log("Index \"%s\" created/updated successfully", meta_index->Name.c_str());
+        ISLOGGER_I(__CLASS__, "Index \"%s\" created/updated successfully", meta_index->Name.c_str());
     }
 
     //Обновляем представления
@@ -150,16 +150,16 @@ int MRMigrator::Update(const ISVectorString& paths)
     {
         if (!db.ViewExists(meta_view, is_exists))
         {
-            MR_LOG.Log(db.GetErrorString().c_str());
+            ISLOGGER_E(__CLASS__, db.GetErrorString().c_str());
             return EXIT_FAILURE;
         }
 
         if (bool result = is_exists ? db.ViewUpdate(meta_view) : db.ViewCreate(meta_view); !result)
         {
-            MR_LOG.Log(db.GetErrorString().c_str());
+            ISLOGGER_E(__CLASS__, db.GetErrorString().c_str());
             return EXIT_FAILURE;
         }
-        MR_LOG.Log("View \"%s\" created/updated successfully", meta_view->Name.c_str());
+        ISLOGGER_I(__CLASS__, "View \"%s\" created/updated successfully", meta_view->Name.c_str());
     }
 
     //Обновляем внешние ключи
@@ -167,16 +167,16 @@ int MRMigrator::Update(const ISVectorString& paths)
     {
         if (!db.ForeignExists(meta_foreign, is_exists))
         {
-            MR_LOG.Log(db.GetErrorString().c_str());
+            ISLOGGER_E(__CLASS__, db.GetErrorString().c_str());
             return EXIT_FAILURE;
         }
 
         if (bool result = is_exists ? db.ForeignUpdate(meta_foreign) : db.ForeignCreate(meta_foreign); !result)
         {
-            MR_LOG.Log(db.GetErrorString().c_str());
+            ISLOGGER_E(__CLASS__, db.GetErrorString().c_str());
             return EXIT_FAILURE;
         }
-        MR_LOG.Log("Foreign key \"%s\" created/updated successfully", meta_foreign->Name.c_str());
+        ISLOGGER_I(__CLASS__, "Foreign key \"%s\" created/updated successfully", meta_foreign->Name.c_str());
     }
 
     (void)db.Disconnect();
@@ -197,12 +197,12 @@ int MRMigrator::CheckModule()
     auto t = ISAlgorithm::GetTick();
     if (!d.InitLibrary())
     {
-        MR_LOG.Log("Cannot init library \"%s\": %s", d.GetLibraryPath().c_str(), d.GetErrorString().c_str());
+        ISLOGGER_E(__CLASS__, "Cannot init library \"%s\": %s", d.GetLibraryPath().c_str(), d.GetErrorString().c_str());
         return EXIT_FAILURE;
     }
-    MR_LOG.Log("Load library %s success for %lld msec",
-        d.GetLibraryPath().c_str(), ISAlgorithm::GetTickDiff(t));
 
+    ISLOGGER_I(__CLASS__, "Load library %s success for %lld msec",
+        d.GetLibraryPath().c_str(), ISAlgorithm::GetTickDiff(t));
     return EXIT_SUCCESS;
 }
 //-----------------------------------------------------------------------------
@@ -212,17 +212,17 @@ int MRMigrator::ShowConfig()
     std::ifstream file(config_path);
     if (!file.is_open())
     {
-        MR_LOG.Log("Cannot open config file %s: %s",
+        ISLOGGER_E(__CLASS__, "Cannot open config file %s: %s",
             config_path.c_str(), ISAlgorithm::GetLastErrorS().c_str());
         return EXIT_FAILURE;
     }
 
-    MR_LOG.LogWH("%s\n", config_path.c_str());
+    ISLOGGER_I(__CLASS__, "%s\n", config_path.c_str());
 
     std::string line;
     while (std::getline(file, line))
     {
-        MR_LOG.LogWH(line.c_str());
+        ISLOGGER_I(__CLASS__, line.c_str());
     }
     return EXIT_SUCCESS;
 }
@@ -231,7 +231,7 @@ int MRMigrator::ShowOld(const ISVectorString& paths, const argparse::ArgumentPar
 {
     if (!MRMetaData::Instance().Init(paths))
     {
-        MR_LOG.Log("Meta data is not init: %s", MRMetaData::Instance().GetErrorString().c_str());
+        ISLOGGER_E(__CLASS__, "Meta data is not init: %s", MRMetaData::Instance().GetErrorString().c_str());
         return EXIT_FAILURE;
     }
 
@@ -250,19 +250,19 @@ int MRMigrator::ShowOld(const ISVectorString& paths, const argparse::ArgumentPar
     bool is_exists = false;
     if (!db.ExistsDB(is_exists))
     {
-        MR_LOG.Log(db.GetErrorString().c_str());
+        ISLOGGER_E(__CLASS__, db.GetErrorString().c_str());
         return EXIT_FAILURE;
     }
 
     if (!is_exists)
     {
-        MR_LOG.Log("Database is not exists");
+        ISLOGGER_E(__CLASS__, "Database is not exists");
         return EXIT_FAILURE;
     }
 
     if (!db.Connect())
     {
-        MR_LOG.Log(db.GetErrorString().c_str());
+        ISLOGGER_E(__CLASS__, db.GetErrorString().c_str());
         return EXIT_FAILURE;
     }
 
@@ -285,7 +285,7 @@ int MRMigrator::ShowOld(const ISVectorString& paths, const argparse::ArgumentPar
 
     if (error_string.has_value())
     {
-        MR_LOG.Log(error_string.value().c_str());
+        ISLOGGER_E(__CLASS__, error_string.value().c_str());
         return EXIT_FAILURE;
     }
 
@@ -297,13 +297,14 @@ int MRMigrator::InitConfig(const std::string& file_path)
 {
     if (ISAlgorithm::FileExist(file_path))
     {
-        MR_LOG.Log("File \"%s\" already exists", file_path.c_str());
+        ISLOGGER_E(__CLASS__, "File \"%s\" already exists", file_path.c_str());
         return EXIT_FAILURE;
     }
 
     if (!ISConfig::Instance().ReInitialize(file_path))
     {
-        MR_LOG.Log("Cannot init config file: %s", ISConfig::Instance().GetErrorString().c_str());
+        ISLOGGER_E(__CLASS__, "Cannot init config file: %s",
+            ISConfig::Instance().GetErrorString().c_str());
         return EXIT_FAILURE;
     }
 
@@ -314,11 +315,12 @@ bool MRMigrator::InitLibrary(MRDatabase& db)
 {
     if (!db.InitLibrary())
     {
-        MR_LOG.Log("Cannot init library \"%s\": %s", db.GetLibraryPath().c_str(), db.GetErrorString().c_str());
+        ISLOGGER_E(__CLASS__, "Cannot init library \"%s\": %s",
+            db.GetLibraryPath().c_str(), db.GetErrorString().c_str());
         return false;
     }
 
-    MR_LOG.Log("Init library \"%s\" success, version %s",
+    ISLOGGER_I(__CLASS__, "Init library \"%s\" success, version %s",
         db.GetLibraryPath().c_str(), db.GetVersion().c_str());
     return true;
 }

@@ -1,8 +1,8 @@
 #include "MRUtils.h"
 #include "ISConfig.h"
-#include "MRLogger.h"
 #include "MRTemplate.h"
 #include "MRConstants.h"
+#include "ISLogger.h"
 //-----------------------------------------------------------------------------
 IDatabase::DatabaseType MRUtils::ModuleNameToDatabaseType(std::string module_name)
 {
@@ -16,7 +16,7 @@ IDatabase::DatabaseType MRUtils::ModuleNameToDatabaseType(std::string module_nam
         return IDatabase::DatabaseType::PostgreSQL;
     }
 
-    MR_LOG.Log("Invalid module name '%s' in config file", module_name.c_str());
+    ISLOGGER_E(__CLASS__, "Invalid module name '%s' in config file", module_name.c_str());
     return IDatabase::DatabaseType::Unknown;
 }
 //-----------------------------------------------------------------------------
@@ -40,7 +40,7 @@ bool MRUtils::InitConfig()
 
     if (!ISConfig::Instance().Initialize("Migrator"))
     {
-        MR_LOG.Log("Cannot init config file: %s", ISConfig::Instance().GetErrorString().c_str());
+        ISLOGGER_E(__CLASS__, "Cannot init config file: %s", ISConfig::Instance().GetErrorString().c_str());
         return false;
     }
 
@@ -49,7 +49,7 @@ bool MRUtils::InitConfig()
     {
         if (!ISConfig::Instance().IsValid())
         {
-            MR_LOG.Log("Config file is not valid: %s", ISConfig::Instance().GetErrorString().c_str());
+            ISLOGGER_E(__CLASS__, "Config file is not valid: %s", ISConfig::Instance().GetErrorString().c_str());
             return false;
         }
     }
@@ -64,14 +64,14 @@ std::optional<ISVectorString> MRUtils::ExtractPaths(const std::string& subcomman
     }
     catch (const std::logic_error& e)
     {
-        MR_LOG.Log("Cannot read paths argument. %s", e.what());
+        ISLOGGER_E(__CLASS__, "Cannot read paths argument. %s", e.what());
     }
     return std::nullopt;
 }
 //-----------------------------------------------------------------------------
 void MRUtils::PrintOldObjects(const IDatabase::ShowOldStruct& s)
 {
-    MR_LOG.LogWH("");
+    ISLOGGER_I(__CLASS__, "");
     MRUtils::PrintOldObjects(s.Tables, "Tables");
     MRUtils::PrintOldObjects(s.Fields, "Fields");
     MRUtils::PrintOldObjects(s.Views, "Views");
@@ -81,21 +81,21 @@ void MRUtils::PrintOldObjects(const IDatabase::ShowOldStruct& s)
 //-----------------------------------------------------------------------------
 void MRUtils::PrintOldObjects(const ISVectorString& v, const std::string& title)
 {
-    MR_LOG.LogWH("");
+    ISLOGGER_I(__CLASS__, "");
 
-    MR_LOG.LogWH("%s:", title.c_str());
+    ISLOGGER_I(__CLASS__, "%s:", title.c_str());
     if (v.empty())
     {
-        MR_LOG.LogWH("  No old ones");
+        ISLOGGER_I(__CLASS__, "  No old ones");
     }
     else
     {
         std::for_each(v.begin(), v.end(), [](const std::string &object_name)
-            {
-                MR_LOG.LogWH("  %s", object_name.c_str());
-            });
+        {
+            ISLOGGER_I(__CLASS__, "  %s", object_name.c_str());
+        });
     }
 
-    MR_LOG.LogWH("");
+    ISLOGGER_I(__CLASS__, "");
 }
 //-----------------------------------------------------------------------------
