@@ -6,6 +6,8 @@
 #include "MRUtils.h"
 #include "MRTemplate.h"
 #include "MRConstants.h"
+#include "ISDir.h"
+#include "ISFile.h"
 //-----------------------------------------------------------------------------
 IDatabaseSQLite::IDatabaseSQLite(DatabaseType database_type)
     : IDatabase(database_type),
@@ -27,22 +29,20 @@ std::string IDatabaseSQLite::GetVersion() const
 //-----------------------------------------------------------------------------
 bool IDatabaseSQLite::ExistsDB(bool& is_exists)
 {
-    is_exists = ISAlgorithm::FileExist(m_Path);
+    is_exists = ISFile::Exists(m_Path);
     return true;
 }
 //-----------------------------------------------------------------------------
 bool IDatabaseSQLite::Create()
 {
     //Создаём директорию, если её ещё нет
-    size_t pos = m_Path.rfind(MRConstants::PATH_SEPARATOR);
-    std::string dir_path = m_Path.substr(0, pos);
-
-    if (!ISAlgorithm::DirExist(dir_path))
+    auto dir_path = m_Path.parent_path();
+    if (!ISDir::Exists(dir_path))
     {
         std::string error_string;
-        if (!ISAlgorithm::DirCreate(dir_path, &error_string))
+        if (!ISDir::Create(dir_path, &error_string))
         {
-            m_ErrorString = ISAlgorithm::StringF("Cannot create directory (%s): %s", dir_path.c_str(), error_string.c_str());
+            m_ErrorString = ISString::F("Cannot create directory (%s): %s", dir_path.u8string().c_str(), error_string.c_str());
             return false;
         }
     }
@@ -63,9 +63,9 @@ bool IDatabaseSQLite::Connect()
 {
     if (!m_DB)
     {
-        if (int r = MRDefSingleton::Get().SQLite->sqlite3_open(m_Path.c_str(), &m_DB); r != SQLITE_OK)
+        if (int r = MRDefSingleton::Get().SQLite->sqlite3_open(m_Path.u8string().c_str(), &m_DB); r != SQLITE_OK)
         {
-            m_ErrorString = ISAlgorithm::StringF("Cannot open database '%s': %s", m_Path.c_str(), MRDefSingleton::Get().SQLite->sqlite3_errstr(r));
+            m_ErrorString = ISString::F("Cannot open database '%s': %s", m_Path.u8string().c_str(), MRDefSingleton::Get().SQLite->sqlite3_errstr(r));
             return false;
         }
     }
@@ -76,7 +76,7 @@ bool IDatabaseSQLite::Disconnect()
 {
     if (int r = MRDefSingleton::Get().SQLite->sqlite3_close_v2(m_DB); r != SQLITE_OK)
     {
-        m_ErrorString = ISAlgorithm::StringF("Cannot close connection to the database '%s': %s", m_Path.c_str(), MRDefSingleton::Get().SQLite->sqlite3_errstr(r));
+        m_ErrorString = ISString::F("Cannot close connection to the database '%s': %s", m_Path.u8string().c_str(), MRDefSingleton::Get().SQLite->sqlite3_errstr(r));
         return false;
     }
     m_DB = nullptr;
@@ -102,7 +102,7 @@ bool IDatabaseSQLite::TableExists(const TMetaTable* meta_table, bool& is_exists)
     qSelect.BindString(meta_table->Name);
     if (!qSelect.Execute())
     {
-        m_ErrorString = ISAlgorithm::StringF("Cannot check exist table '%s': %s",
+        m_ErrorString = ISString::F("Cannot check exist table '%s': %s",
             meta_table->Name.c_str(), qSelect.GetErrorString().c_str());
         return false;
     }
@@ -142,7 +142,7 @@ bool IDatabaseSQLite::TableUpdate(const TMetaTable* meta_table)
     }
 
     //Проверяем, нужно ли менять атрибуты: тип данных, размер и т.д.
-    MRQuery qSelect(this, ISAlgorithm::StringF("PRAGMA table_xinfo('%s')", meta_table->Name.c_str()));
+    MRQuery qSelect(this, ISString::F("PRAGMA table_xinfo('%s')", meta_table->Name.c_str()));
     if (!qSelect.Execute())
     {
         m_ErrorString = qSelect.GetErrorString();
@@ -162,7 +162,7 @@ bool IDatabaseSQLite::TableUpdate(const TMetaTable* meta_table)
             break;
         }
 
-        std::string field_type = ISAlgorithm::StringToLowerGet(qSelect.ReadColumn(2));
+        std::string field_type = ISString::ToLower(qSelect.ReadColumn(2));
         bool field_not_null = qSelect.ReadColumn_Int(3);
         std::string field_default = qSelect.IsNull(4) ? std::string() : qSelect.ReadColumn(4);
         bool field_primary = qSelect.ReadColumn_Int(5) != 0;
@@ -192,15 +192,15 @@ bool IDatabaseSQLite::TableUpdate(const TMetaTable* meta_table)
         {
             fields_for_select += meta_field->Name + ", ";
         }
-        ISAlgorithm::StringChop(fields_for_select, 2);
+        ISString::ChopRight(fields_for_select, 2);
 
         ISVectorString v =
         {
             "PRAGMA foreign_keys=off",
             "BEGIN TRANSACTION",
-            ISAlgorithm::StringF("ALTER TABLE %s RENAME TO _temp_table", meta_table->Name.c_str()),
+            ISString::F("ALTER TABLE %s RENAME TO _temp_table", meta_table->Name.c_str()),
             MRSQLProcessor::SQLite::TableCreate(meta_table),
-            ISAlgorithm::StringF("INSERT INTO %s(%s) SELECT %s FROM _temp_table",
+            ISString::F("INSERT INTO %s(%s) SELECT %s FROM _temp_table",
                 meta_table->Name.c_str(), fields_for_select.c_str(), fields_for_select.c_str()),
             "DROP TABLE _temp_table;",
             "COMMIT",
@@ -215,7 +215,7 @@ bool IDatabaseSQLite::TableUpdate(const TMetaTable* meta_table)
                 std::string prev_error = q.GetErrorString();
                 if (!q.Execute("ROLLBACK"))
                 {
-                    m_ErrorString = ISAlgorithm::StringF("Cannot rollback transaction: %s\nPrevious error: %s",
+                    m_ErrorString = ISString::F("Cannot rollback transaction: %s\nPrevious error: %s",
                         q.GetErrorString().c_str(), prev_error.c_str());
                 }
                 else
@@ -283,7 +283,7 @@ bool IDatabaseSQLite::IndexExists(const TMetaIndex* meta_index, bool& is_exists)
     qSelect.BindString(meta_index->Name);
     if (!qSelect.Execute())
     {
-        m_ErrorString = ISAlgorithm::StringF("Cannot check exist index '%s': %s",
+        m_ErrorString = ISString::F("Cannot check exist index '%s': %s",
             meta_index->Name.c_str(), qSelect.GetErrorString().c_str());
         return false;
     }
@@ -306,7 +306,7 @@ bool IDatabaseSQLite::IndexCreate(const TMetaIndex* meta_index)
 bool IDatabaseSQLite::IndexUpdate(const TMetaIndex* meta_index)
 {
     //Проверим, не изменилась ли уникальность
-    MRQuery qSelect(this, ISAlgorithm::StringF("PRAGMA index_list(%s);", meta_index->TableName.c_str()));
+    MRQuery qSelect(this, ISString::F("PRAGMA index_list(%s);", meta_index->TableName.c_str()));
     if (!qSelect.Execute())
     {
         m_ErrorString = qSelect.GetErrorString();
@@ -317,8 +317,8 @@ bool IDatabaseSQLite::IndexUpdate(const TMetaIndex* meta_index)
 
     while (qSelect.Next())
     {
-        if (ISAlgorithm::StringToLowerGet(qSelect.ReadColumn(1)) ==
-            ISAlgorithm::StringToLowerGet(meta_index->Name))
+        if (ISString::ToLower(qSelect.ReadColumn(1)) ==
+            ISString::ToLower(meta_index->Name))
         {
             need_update = (qSelect.ReadColumn_Int(2) == 1 ? true : false) != meta_index->Unique;
             break;
@@ -329,7 +329,7 @@ bool IDatabaseSQLite::IndexUpdate(const TMetaIndex* meta_index)
     //Если уникальность не менялась - проверим что там с полями
     if (!need_update)
     {
-        if (!qSelect.Execute(ISAlgorithm::StringF("PRAGMA index_info(%s);", meta_index->Name.c_str())))
+        if (!qSelect.Execute(ISString::F("PRAGMA index_info(%s);", meta_index->Name.c_str())))
         {
             m_ErrorString = qSelect.GetErrorString();
             return false;
@@ -338,7 +338,7 @@ bool IDatabaseSQLite::IndexUpdate(const TMetaIndex* meta_index)
         ISVectorString index_fields;
         while (qSelect.Next())
         {
-            index_fields.emplace_back(ISAlgorithm::StringToLowerGet(qSelect.ReadColumn(2)));
+            index_fields.emplace_back(ISString::ToLower(qSelect.ReadColumn(2)));
         }
         std::sort(index_fields.begin(), index_fields.end());
 
@@ -348,7 +348,7 @@ bool IDatabaseSQLite::IndexUpdate(const TMetaIndex* meta_index)
 
     if (need_update)
     {
-        MRQuery qDelete(this, ISAlgorithm::StringF("DROP INDEX %s;", meta_index->Name.c_str()));
+        MRQuery qDelete(this, ISString::F("DROP INDEX %s;", meta_index->Name.c_str()));
         if (!qDelete.Execute())
         {
             m_ErrorString = qDelete.GetErrorString();
@@ -390,7 +390,7 @@ bool IDatabaseSQLite::ViewExists(const TMetaView* meta_view, bool& is_exists)
     qSelect.BindString(meta_view->Name);
     if (!qSelect.Execute())
     {
-        m_ErrorString = ISAlgorithm::StringF("Cannot check exist view '%s': %s",
+        m_ErrorString = ISString::F("Cannot check exist view '%s': %s",
             meta_view->Name.c_str(), qSelect.GetErrorString().c_str());
         return false;
     }

@@ -1,5 +1,6 @@
 #include "IQuerySQLite.h"
 #include "IDatabaseSQLite.h"
+#include "ISString.h"
 //-----------------------------------------------------------------------------
 IQuerySQLite::IQuerySQLite(IDatabase* db, const std::string& sql)
     : IQuery(db, sql),
@@ -39,12 +40,12 @@ void IQuerySQLite::ClearStatement()
     {
         if (int r = MRDefSingleton::Get().SQLite->sqlite3_reset(m_STMT); r != SQLITE_OK)
         {
-            throw ISException(ISAlgorithm::StringF("cannot reset statement: %s", MRDefSingleton::Get().SQLite->sqlite3_errstr(r)));
+            throw ISException(ISString::F("cannot reset statement: %s", MRDefSingleton::Get().SQLite->sqlite3_errstr(r)));
         }
 
         if (int r = MRDefSingleton::Get().SQLite->sqlite3_finalize(m_STMT); r != SQLITE_OK)
         {
-            throw ISException(ISAlgorithm::StringF("cannot finalize statement: %s", MRDefSingleton::Get().SQLite->sqlite3_errstr(r)));
+            throw ISException(ISString::F("cannot finalize statement: %s", MRDefSingleton::Get().SQLite->sqlite3_errstr(r)));
         }
 
         m_STMT = nullptr;
@@ -98,7 +99,7 @@ bool IQuerySQLite::Execute(const std::string& sql)
         return true;
     }
 
-    m_ErrorString = ISAlgorithm::StringF("Cannot execute sql query\n%s\nError: %s", m_SQL.c_str(), MRDefSingleton::Get().SQLite->sqlite3_errstr(r));
+    m_ErrorString = ISString::F("Cannot execute sql query\n%s\nError: %s", m_SQL.c_str(), MRDefSingleton::Get().SQLite->sqlite3_errstr(r));
     return false;
 }
 //-----------------------------------------------------------------------------
@@ -148,7 +149,7 @@ bool IQuerySQLite::Prepare()
 {
     if (int r = MRDefSingleton::Get().SQLite->sqlite3_prepare_v2(m_DB, m_SQL.c_str(), (int)m_SQL.size(), &m_STMT, nullptr); r != SQLITE_OK)
     {
-        m_ErrorString = ISAlgorithm::StringF("Cannot prepare sql query\n%s\nError: %s", m_SQL.c_str(), MRDefSingleton::Get().SQLite->sqlite3_errstr(r));
+        m_ErrorString = ISString::F("Cannot prepare sql query\n%s\nError: %s", m_SQL.c_str(), MRDefSingleton::Get().SQLite->sqlite3_errstr(r));
         return false;
     }
     m_ColumnCount = MRDefSingleton::Get().SQLite->sqlite3_column_count(m_STMT);
@@ -168,7 +169,7 @@ bool IQuerySQLite::FillParams()
         const ISVariant& param = m_Params[i];
         if (std::holds_alternative<std::nullptr_t>(param))
         {
-            m_ErrorString = ISAlgorithm::StringF("Parameter %zu is null", i);
+            m_ErrorString = ISString::F("Parameter %zu is null", i);
             return false;
         }
 
@@ -184,7 +185,7 @@ bool IQuerySQLite::FillParams()
 
         if (r != SQLITE_OK)
         {
-            m_ErrorString = ISAlgorithm::StringF("Cannot bind parameter %zu: %s", i, MRDefSingleton::Get().SQLite->sqlite3_errstr(r));
+            m_ErrorString = ISString::F("Cannot bind parameter %zu: %s", i, MRDefSingleton::Get().SQLite->sqlite3_errstr(r));
             return false;
         }
     }

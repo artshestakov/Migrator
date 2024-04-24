@@ -4,6 +4,7 @@
 #include "MRUtils.h"
 #include "tinyxml2.h"
 #include "ISException.h"
+#include "ISString.h"
 //-----------------------------------------------------------------------------
 namespace MRTemplate
 {
@@ -22,7 +23,7 @@ namespace MRTemplate
         {
             if (strlen(xml_attribute->Value()) == 0 && not_null) //Он пустой, но не должен быть пустым - ругаемся
             {
-                throw ISException(ISAlgorithm::StringF("attribute '%s' is empty on line %d",
+                throw ISException(ISString::F("attribute '%s' is empty on line %d",
                     attribute_name.c_str(), xml_element->GetLineNum()));
             }
         }
@@ -30,7 +31,7 @@ namespace MRTemplate
         {
             if (not_null) //Но он должен быть - ругаемся
             {
-                throw ISException(ISAlgorithm::StringF("attribute '%s' is not specified on line %d",
+                throw ISException(ISString::F("attribute '%s' is not specified on line %d",
                     attribute_name.c_str(), xml_element->GetLineNum()));
             }
             else //Он не является обязатепльным - нам пофиг. Значение уже было проинициализированно по умолчанию
@@ -45,7 +46,7 @@ namespace MRTemplate
             //пустые значения за ошибку не считаем, они будут инициализированны далее в структурах
             if (auto v = xml_attribute->Value(); v && strlen(v) > 0 && !ok)
             {
-                throw ISException(ISAlgorithm::StringF("attribute '%s' has invalid type on line %d",
+                throw ISException(ISString::F("attribute '%s' has invalid type on line %d",
                     attribute_name.c_str(), xml_element->GetLineNum()));
             }
         };
@@ -56,7 +57,7 @@ namespace MRTemplate
 
             if (to_lower_value)
             {
-                ISAlgorithm::StringToLower(dest_value);
+                ISString::ToLower(dest_value);
             }
         }
         else if constexpr (std::is_same_v<int, T>)
@@ -78,14 +79,14 @@ namespace MRTemplate
     }
 
     template <typename T>
-    bool ExistsObject(const std::vector<const T*>& v, const TMetaBase* object, const std::string& file_path, const tinyxml2::XMLElement* xml_element, std::string& error_string)
+    bool ExistsObject(const std::vector<const T*>& v, const TMetaBase* object, const std::filesystem::path& file_path, const tinyxml2::XMLElement* xml_element, std::string& error_string)
     {
         for (const TMetaBase* meta_object : v)
         {
             if (meta_object->Name == object->Name)
             {
-                error_string = ISAlgorithm::StringF("duplicate object \"%s\" in file \"%s\" on line %d",
-                    object->Name.c_str(), file_path.c_str(), xml_element->GetLineNum());
+                error_string = ISString::F("duplicate object \"%s\" in file \"%s\" on line %d",
+                    object->Name.c_str(), file_path.u8string().c_str(), xml_element->GetLineNum());
                 return true;
             }
         }

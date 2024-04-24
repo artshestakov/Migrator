@@ -1,17 +1,18 @@
 #include "MRSQLProcessor.h"
+#include "ISString.h"
 //-----------------------------------------------------------------------------
 std::string MRSQLProcessor::SQLite::TableCreate(const TMetaTable* meta_table)
 {
-    std::string sql_text = ISAlgorithm::StringF("CREATE TABLE \"%s\"\n(\n", meta_table->Name.c_str());
+    std::string sql_text = ISString::F("CREATE TABLE \"%s\"\n(\n", meta_table->Name.c_str());
 
     for (const TMetaField* meta_field : meta_table->Fields)
     {
-        sql_text += ISAlgorithm::StringF("    \"%s\" %s",
+        sql_text += ISString::F("    \"%s\" %s",
             meta_field->Name.c_str(), meta_field->Type.c_str());
 
         if (!meta_field->DefaultValue.empty())
         {
-            sql_text += ISAlgorithm::StringF(" DEFAULT %s", meta_field->DefaultValue.c_str());
+            sql_text += ISString::F(" DEFAULT %s", meta_field->DefaultValue.c_str());
         }
 
         if (meta_field->NotNull)
@@ -28,12 +29,12 @@ std::string MRSQLProcessor::SQLite::TableCreate(const TMetaTable* meta_table)
         {
             sql_text += primary_field + ", ";
         }
-        ISAlgorithm::StringChop(sql_text, 2);
+        ISString::ChopRight(sql_text, 2);
         sql_text += ")\n);";
     }
     else
     {
-        ISAlgorithm::StringChop(sql_text, 2);
+        ISString::ChopRight(sql_text, 2);
         sql_text += "\n);\n";
     }
     return sql_text;
@@ -41,7 +42,7 @@ std::string MRSQLProcessor::SQLite::TableCreate(const TMetaTable* meta_table)
 //-----------------------------------------------------------------------------
 std::string MRSQLProcessor::SQLite::FieldCreate(const TMetaField* meta_field)
 {
-    std::string sql_text = ISAlgorithm::StringF("ALTER TABLE %s ADD COLUMN %s %s",
+    std::string sql_text = ISString::F("ALTER TABLE %s ADD COLUMN %s %s",
         meta_field->MetaTable->Name.c_str(), meta_field->Name.c_str(), meta_field->Type.c_str());
 
     if (meta_field->NotNull)
@@ -51,7 +52,7 @@ std::string MRSQLProcessor::SQLite::FieldCreate(const TMetaField* meta_field)
 
     if (!meta_field->DefaultValue.empty())
     {
-        sql_text += ISAlgorithm::StringF(" DEFAULT(%s)", meta_field->DefaultValue.c_str());
+        sql_text += ISString::F(" DEFAULT(%s)", meta_field->DefaultValue.c_str());
     }
 
     return sql_text + ';';
@@ -59,7 +60,7 @@ std::string MRSQLProcessor::SQLite::FieldCreate(const TMetaField* meta_field)
 //-----------------------------------------------------------------------------
 std::string MRSQLProcessor::SQLite::IndexCreate(const TMetaIndex* meta_index)
 {
-    std::string sql_text = ISAlgorithm::StringF("CREATE%s INDEX %s ON %s(",
+    std::string sql_text = ISString::F("CREATE%s INDEX %s ON %s(",
         (meta_index->Unique ? " UNIQUE" : ""),
         meta_index->Name.c_str(), meta_index->TableName.c_str());
 
@@ -68,24 +69,24 @@ std::string MRSQLProcessor::SQLite::IndexCreate(const TMetaIndex* meta_index)
         sql_text += field_name + ", ";
     }
 
-    ISAlgorithm::StringChop(sql_text, 2);
+    ISString::ChopRight(sql_text, 2);
     sql_text += ");";
     return sql_text;
 }
 //-----------------------------------------------------------------------------
 std::string MRSQLProcessor::SQLite::ViewCreate(const TMetaView* meta_view)
 {
-    return ISAlgorithm::StringF("CREATE VIEW \"%s\" AS\n%s",
+    return ISString::F("CREATE VIEW \"%s\" AS\n%s",
         meta_view->Name.c_str(), meta_view->SQL.c_str());
 }
 //-----------------------------------------------------------------------------
 std::string MRSQLProcessor::PostgreSQL::TableCreate(const TMetaTable* meta_table)
 {
-    std::string sql_text = ISAlgorithm::StringF("CREATE TABLE public.\"%s\"\n(\n", meta_table->Name.c_str());
+    std::string sql_text = ISString::F("CREATE TABLE public.\"%s\"\n(\n", meta_table->Name.c_str());
 
     for (const TMetaField* meta_field : meta_table->Fields)
     {
-        sql_text += ISAlgorithm::StringF("    \"%s\" %s",
+        sql_text += ISString::F("    \"%s\" %s",
             meta_field->Name.c_str(), meta_field->Type.c_str());
 
         if (!meta_field->DefaultValue.empty())
@@ -103,12 +104,12 @@ std::string MRSQLProcessor::PostgreSQL::TableCreate(const TMetaTable* meta_table
     if (!meta_table->PrimaryFields.empty())
     {
         sql_text += "    PRIMARY KEY (" +
-            ISAlgorithm::StringJoin(meta_table->PrimaryFields, ", ") +
+            ISString::Join(meta_table->PrimaryFields, ", ") +
             ")\n);";
     }
     else
     {
-        ISAlgorithm::StringChop(sql_text, 2);
+        ISString::ChopRight(sql_text, 2);
         sql_text += "\n);\n";
     }
     return sql_text;
@@ -116,19 +117,19 @@ std::string MRSQLProcessor::PostgreSQL::TableCreate(const TMetaTable* meta_table
 //-----------------------------------------------------------------------------
 std::string MRSQLProcessor::PostgreSQL::TableComment(const TMetaTable* meta_table)
 {
-    return ISAlgorithm::StringF("COMMENT ON TABLE \"%s\" IS '%s'",
+    return ISString::F("COMMENT ON TABLE \"%s\" IS '%s'",
         meta_table->Name.c_str(), meta_table->Comment.c_str());
 }
 //-----------------------------------------------------------------------------
 std::string MRSQLProcessor::PostgreSQL::FieldComment(const TMetaField* meta_field)
 {
-    return ISAlgorithm::StringF("COMMENT ON COLUMN \"%s\".\"%s\" IS '%s'",
+    return ISString::F("COMMENT ON COLUMN \"%s\".\"%s\" IS '%s'",
         meta_field->MetaTable->Name.c_str(), meta_field->Name.c_str(), meta_field->Comment.c_str());
 }
 //-----------------------------------------------------------------------------
 std::string MRSQLProcessor::PostgreSQL::FieldCreate(const TMetaField* meta_field)
 {
-    std::string sql_text = ISAlgorithm::StringF("ALTER TABLE \"%s\" ADD COLUMN \"%s\" %s",
+    std::string sql_text = ISString::F("ALTER TABLE \"%s\" ADD COLUMN \"%s\" %s",
         meta_field->MetaTable->Name.c_str(), meta_field->Name.c_str(), meta_field->Type.c_str());
 
     if (!meta_field->DefaultValue.empty())
@@ -146,7 +147,7 @@ std::string MRSQLProcessor::PostgreSQL::FieldCreate(const TMetaField* meta_field
 //-----------------------------------------------------------------------------
 std::string MRSQLProcessor::PostgreSQL::FieldDefault(const TMetaField* meta_field)
 {
-    std::string sql_text = ISAlgorithm::StringF("ALTER TABLE \"%s\" ALTER COLUMN \"%s\"",
+    std::string sql_text = ISString::F("ALTER TABLE \"%s\" ALTER COLUMN \"%s\"",
         meta_field->MetaTable->Name.c_str(), meta_field->Name.c_str());
 
     if (meta_field->DefaultValue.empty())
@@ -170,21 +171,21 @@ std::string MRSQLProcessor::PostgreSQL::IndexCreate(const TMetaIndex* meta_index
         sql_text += " UNIQUE";
     }
 
-    sql_text += ISAlgorithm::StringF(" INDEX %s ON \"%s\" USING BTREE(",
+    sql_text += ISString::F(" INDEX %s ON \"%s\" USING BTREE(",
         meta_index->Name.c_str(), meta_index->TableName.c_str());
 
     for (const std::string& field_name : meta_index->Fields)
     {
         sql_text += "\"" + field_name + "\", ";
     }
-    ISAlgorithm::StringChop(sql_text, 2);
+    ISString::ChopRight(sql_text, 2);
     sql_text += ")";
     return sql_text;
 }
 //-----------------------------------------------------------------------------
 std::string MRSQLProcessor::PostgreSQL::IndexComment(const TMetaIndex* meta_index)
 {
-    return ISAlgorithm::StringF("COMMENT ON INDEX \"%s\" IS '%s'",
+    return ISString::F("COMMENT ON INDEX \"%s\" IS '%s'",
         meta_index->Name.c_str(), meta_index->Comment.c_str());
 }
 //-----------------------------------------------------------------------------
@@ -196,13 +197,13 @@ std::string MRSQLProcessor::PostgreSQL::ViewCreate(const TMetaView* meta_view)
 //-----------------------------------------------------------------------------
 std::string MRSQLProcessor::PostgreSQL::ViewComment(const TMetaView* meta_view)
 {
-    return ISAlgorithm::StringF("COMMENT ON VIEW \"%s\" IS '%s'",
+    return ISString::F("COMMENT ON VIEW \"%s\" IS '%s'",
         meta_view->Name.c_str(), meta_view->Comment.c_str());
 }
 //-----------------------------------------------------------------------------
 std::string MRSQLProcessor::PostgreSQL::ForeignCreate(const TMetaForeign* meta_foreign)
 {
-    return ISAlgorithm::StringF(
+    return ISString::F(
         "ALTER TABLE \"%s\"\n"
         "ADD CONSTRAINT \"%s\" FOREIGN KEY (\"%s\")\n"
         "REFERENCES \"%s\" (\"%s\")\n"
@@ -216,7 +217,7 @@ std::string MRSQLProcessor::PostgreSQL::ForeignCreate(const TMetaForeign* meta_f
 //-----------------------------------------------------------------------------
 std::string MRSQLProcessor::PostgreSQL::ForeignComment(const TMetaForeign* meta_foreign)
 {
-    return ISAlgorithm::StringF("COMMENT ON CONSTRAINT \"%s\" ON \"%s\" IS '%s'",
+    return ISString::F("COMMENT ON CONSTRAINT \"%s\" ON \"%s\" IS '%s'",
         meta_foreign->Name.c_str(), meta_foreign->TableName.c_str(), meta_foreign->Comment.c_str());
 }
 //-----------------------------------------------------------------------------

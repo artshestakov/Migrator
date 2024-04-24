@@ -5,6 +5,7 @@
 #include "MRUtils.h"
 #include "MRQuery.h"
 #include "ISLogger.h"
+#include "ISFile.h"
 //-----------------------------------------------------------------------------
 int MRMigrator::Ping()
 {
@@ -295,7 +296,7 @@ int MRMigrator::ShowOld(const ISVectorString& paths, const argparse::ArgumentPar
 //-----------------------------------------------------------------------------
 int MRMigrator::InitConfig(const std::string& file_path)
 {
-    if (ISAlgorithm::FileExist(file_path))
+    if (ISFile::Exists(file_path))
     {
         ISLOGGER_E(__CLASS__, "File \"%s\" already exists", file_path.c_str());
         return EXIT_FAILURE;

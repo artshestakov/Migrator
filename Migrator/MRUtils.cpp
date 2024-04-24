@@ -6,7 +6,7 @@
 //-----------------------------------------------------------------------------
 IDatabase::DatabaseType MRUtils::ModuleNameToDatabaseType(std::string module_name)
 {
-    ISAlgorithm::StringToLower(module_name);
+    ISString::ToLower(module_name);
     if (module_name == "sqlite")
     {
         return IDatabase::DatabaseType::SQLite;

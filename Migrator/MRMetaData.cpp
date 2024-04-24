@@ -3,6 +3,10 @@
 #include "MRUtils.h"
 #include "MRConstants.h"
 #include "ISLogger.h"
+#include "ISFileInfo.h"
+#include "ISDir.h"
+#include "ISString.h"
+#include "ISHash.h"
 //-----------------------------------------------------------------------------
 MRMetaData::MRMetaData()
 {
@@ -113,15 +117,15 @@ bool MRMetaData::Init(const ISVectorString& path_list)
         }
         else //Это директория - вытаскиваем файлы из неё
         {
-            files = ISAlgorithm::DirFiles(true, path, &err_msg,
-                ISAlgorithm::DirFileSorting::Name, ISAlgorithm::SortingOrder::Ascending,
+            files = ISDir::Files(true, path, &err_msg,
+                ISDir::DirFileSorting::Name, ISDir::SortingOrder::Ascending,
                 { "SMD" });
         }
 
         if (files.empty() && !err_msg.empty())
         {
             //Что-то пошло не так
-            m_ErrorString = ISAlgorithm::StringF("cannot iterate path '%s': %s", path.c_str(), err_msg.c_str());
+            m_ErrorString = ISString::F("cannot iterate path '%s': %s", path.c_str(), err_msg.c_str());
             return false;
         }
 
@@ -139,14 +143,14 @@ bool MRMetaData::Init(const ISVectorString& path_list)
 
         if (!file_amount)
         {
-            m_ErrorString = ISAlgorithm::StringF("directory has no smd-files or invalid path: %s", path.c_str());
+            m_ErrorString = ISString::F("directory has no smd-files or invalid path: %s", path.c_str());
             return false;
         }
     }
     return true;
 }
 //-----------------------------------------------------------------------------
-bool MRMetaData::InitFile(const std::string& file_path)
+bool MRMetaData::InitFile(const std::filesystem::path& file_path)
 {
     m_CurrentFilePath = file_path;
 
@@ -154,7 +158,7 @@ bool MRMetaData::InitFile(const std::string& file_path)
     std::ifstream smd_file(m_CurrentFilePath);
     if (!smd_file.good())
     {
-        m_ErrorString = ISAlgorithm::StringF("cannot read file '%s': %s", m_CurrentFilePath.c_str(), ISAlgorithm::GetLastErrorS().c_str());
+        m_ErrorString = ISString::F("cannot read file '%s': %s", m_CurrentFilePath.u8string().c_str(), ISAlgorithm::GetLastErrorS().c_str());
         return false;
     }
 
@@ -176,7 +180,7 @@ bool MRMetaData::InitContent(const char* content, size_t size)
     tinyxml2::XMLDocument xml_doc;
     if (xml_doc.Parse(content, size) != tinyxml2::XMLError::XML_SUCCESS)
     {
-        m_ErrorString = ISAlgorithm::StringF("cannot parse file '%s': %s", m_CurrentFilePath.c_str(), xml_doc.ErrorStr());
+        m_ErrorString = ISString::F("cannot parse file '%s': %s", m_CurrentFilePath.u8string().c_str(), xml_doc.ErrorStr());
         return false;
     }
 
@@ -185,7 +189,7 @@ bool MRMetaData::InitContent(const char* content, size_t size)
     std::string main_tag_name = std::string(xml_element_main->Name());
     if (main_tag_name != "SMD")
     {
-        m_ErrorString = ISAlgorithm::StringF("name of the main tag is not valid: %s", main_tag_name.c_str());
+        m_ErrorString = ISString::F("name of the main tag is not valid: %s", main_tag_name.c_str());
         return false;
     }
 
@@ -193,7 +197,7 @@ bool MRMetaData::InitContent(const char* content, size_t size)
     tinyxml2::XMLElement* xml_object = xml_element_main->FirstChildElement();
     if (!xml_object)
     {
-        m_ErrorString = ISAlgorithm::StringF("file '%s' has no elements", m_CurrentFilePath.c_str());
+        m_ErrorString = ISString::F("file '%s' has no elements", m_CurrentFilePath.u8string().c_str());
         return false;
     }
 
@@ -215,7 +219,7 @@ bool MRMetaData::InitContent(const char* content, size_t size)
         }
         else //Попался неизвестный тэг - уйдём с ошибкой
         {
-            m_ErrorString = ISAlgorithm::StringF("Tag \"%s\" is not support on file %d",
+            m_ErrorString = ISString::F("Tag \"%s\" is not support on file %d",
                 object_name.c_str(), xml_object->GetLineNum());
         }
 
@@ -239,7 +243,7 @@ bool MRMetaData::InitExecute(tinyxml2::XMLElement* xml_execute)
     }
     catch (const ISException& e)
     {
-        m_ErrorString = ISAlgorithm::StringF("cannot parse attribute. %s", e.what());
+        m_ErrorString = ISString::F("cannot parse attribute. %s", e.what());
         return false;
     }
 
@@ -262,14 +266,14 @@ bool MRMetaData::InitTable(tinyxml2::XMLElement* xml_table)
 
         std::string tmp;
         MRTemplate::GetAttributeXML(tmp, "PrimaryField", xml_table);
-        meta_table->PrimaryFields = ISAlgorithm::StringSplit(tmp, ';');
+        meta_table->PrimaryFields = ISString::Split(tmp, ';');
         std::sort(meta_table->PrimaryFields.begin(), meta_table->PrimaryFields.end());
 
         MRTemplate::GetAttributeXML(meta_table->Comment, "Comment", xml_table, false, false);
     }
     catch (const ISException& e)
     {
-        m_ErrorString = ISAlgorithm::StringF("cannot parse attribute. %s", e.what());
+        m_ErrorString = ISString::F("cannot parse attribute. %s", e.what());
         return false;
     }
 
@@ -323,7 +327,7 @@ bool MRMetaData::InitView(tinyxml2::XMLElement* xml_view)
     }
     catch (const ISException& e)
     {
-        m_ErrorString = ISAlgorithm::StringF("cannot parse attribute. %s", e.what());
+        m_ErrorString = ISString::F("cannot parse attribute. %s", e.what());
         return false;
     }
 
@@ -358,7 +362,7 @@ bool MRMetaData::InitFields(TMetaTable* meta_table, tinyxml2::XMLElement* xml_fi
         }
         catch (const ISException& e)
         {
-            m_ErrorString = ISAlgorithm::StringF("cannot parse attribute. %s", e.what());
+            m_ErrorString = ISString::F("cannot parse attribute. %s", e.what());
             return false;
         }
 
@@ -383,7 +387,7 @@ bool MRMetaData::InitIndexes(TMetaTable* meta_table, tinyxml2::XMLElement* xml_f
 
             std::string tmp;
             MRTemplate::GetAttributeXML(tmp, "Fields", xml_first_index, true);
-            meta_index->Fields = ISAlgorithm::StringSplit(tmp, ';');
+            meta_index->Fields = ISString::Split(tmp, ';');
             std::sort(meta_index->Fields.begin(), meta_index->Fields.end());
 
             MRTemplate::GetAttributeXML(meta_index->Unique, "Unique", xml_first_index, false);
@@ -391,7 +395,7 @@ bool MRMetaData::InitIndexes(TMetaTable* meta_table, tinyxml2::XMLElement* xml_f
         }
         catch (const ISException& e)
         {
-            m_ErrorString = ISAlgorithm::StringF("cannot parse attribute in file %s: %s", m_CurrentFilePath.c_str(), e.what());
+            m_ErrorString = ISString::F("cannot parse attribute in file %s: %s", m_CurrentFilePath.u8string().c_str(), e.what());
             return false;
         }
 
@@ -408,8 +412,8 @@ bool MRMetaData::InitIndexes(TMetaTable* meta_table, tinyxml2::XMLElement* xml_f
                 return !meta_table->GetField(field_name);
             }); r > 0)
         {
-            m_ErrorString = ISAlgorithm::StringF("Invalid field name in index \"%s\" of table \"%s\" in file %s",
-                meta_index->Name.c_str(), meta_table->Name.c_str(), m_CurrentFilePath.c_str());
+            m_ErrorString = ISString::F("Invalid field name in index \"%s\" of table \"%s\" in file %s",
+                meta_index->Name.c_str(), meta_table->Name.c_str(), m_CurrentFilePath.u8string().c_str());
             return false;
         }
 
@@ -435,7 +439,7 @@ bool MRMetaData::InitForeigns(TMetaTable* meta_table, tinyxml2::XMLElement* xml_
         }
         catch (const ISException& e)
         {
-            m_ErrorString = ISAlgorithm::StringF("cannot parse attribute in file %s: %s", m_CurrentFilePath.c_str(), e.what());
+            m_ErrorString = ISString::F("cannot parse attribute in file %s: %s", m_CurrentFilePath.u8string().c_str(), e.what());
             return false;
         }
 
@@ -448,7 +452,7 @@ bool MRMetaData::InitForeigns(TMetaTable* meta_table, tinyxml2::XMLElement* xml_
         //Проверим, что внешний ключ будет установлен на существующем поле
         if (!meta_table->GetField(meta_foreign->FieldName))
         {
-            m_ErrorString = ISAlgorithm::StringF("Invalid field \"%s\" in the foreign \"%s\"",
+            m_ErrorString = ISString::F("Invalid field \"%s\" in the foreign \"%s\"",
                 meta_foreign->FieldName.c_str(), meta_foreign->Name.c_str());
             return false;
         }
@@ -473,7 +477,7 @@ tinyxml2::XMLElement* MRMetaData::FindSection(tinyxml2::XMLElement* xml_sections
             }
             else
             {
-                m_ErrorString = ISAlgorithm::StringF("section '%s' is empty", section_name.c_str());
+                m_ErrorString = ISString::F("section '%s' is empty", section_name.c_str());
                 return nullptr;
             }
         }
@@ -488,28 +492,28 @@ bool MRMetaData::CheckSign(const std::string& content)
     std::smatch match;
     if (!std::regex_search(content.cbegin(), content.cend(), match, regexp))
     {
-        m_ErrorString = ISAlgorithm::StringF("file \"%s\" is not signed", m_CurrentFilePath.c_str());
+        m_ErrorString = ISString::F("file \"%s\" is not signed", m_CurrentFilePath.u8string().c_str());
         return false;
     }
 
     size_t p = content.find('\n');
     if (p == std::string::npos)
     {
-        m_ErrorString = ISAlgorithm::StringF("invalid file \"%s\"", m_CurrentFilePath.c_str());
+        m_ErrorString = ISString::F("invalid file \"%s\"", m_CurrentFilePath.u8string().c_str());
         return false;
     }
 
     std::string header = content.substr(0, p);
-    ISAlgorithm::StringRemoveAllChar(header, '<');
-    ISAlgorithm::StringRemoveAllChar(header, '!');
-    ISAlgorithm::StringRemoveAllChar(header, '-');
-    ISAlgorithm::StringRemoveAllChar(header, '>');
+    ISString::RemoveAllChar(header, '<');
+    ISString::RemoveAllChar(header, '!');
+    ISString::RemoveAllChar(header, '-');
+    ISString::RemoveAllChar(header, '>');
 
     //Проверяем подпись
     std::string sign_content = content.substr(p + 1, content.size() - p - 1);
-    if (ISAlgorithm::StringToSHA(ISAlgorithm::SHAType::SHA512, sign_content) != header)
+    if (ISHash::StringToSHA(ISHash::SHAType::SHA512, sign_content) != header)
     {
-        m_ErrorString = ISAlgorithm::StringF("invalid sign of file \"%s\"", m_CurrentFilePath.c_str());
+        m_ErrorString = ISString::F("invalid sign of file \"%s\"", m_CurrentFilePath.u8string().c_str());
         return false;
     }
     return true;
@@ -522,7 +526,7 @@ bool MRMetaData::CheckForeigns()
         //Проверим, что внешний ключ ссылается на существующую таблицу
         if (!GetMetaTable(meta_foreign->ReferenceTable))
         {
-            m_ErrorString = ISAlgorithm::StringF("Invalid reference table \"%s\" in the foreign \"%s\"",
+            m_ErrorString = ISString::F("Invalid reference table \"%s\" in the foreign \"%s\"",
                 meta_foreign->ReferenceTable.c_str(), meta_foreign->Name.c_str());
             return false;
         }
@@ -530,7 +534,7 @@ bool MRMetaData::CheckForeigns()
         //Проверим, что внешний ключ ссылается на существующее поле в таблице
         if (!GetMetaTable(meta_foreign->ReferenceTable)->GetField(meta_foreign->ReferenceField))
         {
-            m_ErrorString = ISAlgorithm::StringF("Invalid reference field \"%s\" in the foreign \"%s\"",
+            m_ErrorString = ISString::F("Invalid reference field \"%s\" in the foreign \"%s\"",
                 meta_foreign->ReferenceField.c_str(), meta_foreign->Name.c_str());
             return false;
         }

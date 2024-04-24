@@ -44,7 +44,7 @@ private:
     MRDefSQLite::sqlite3* GetPointer() const;
 
 private:
-    std::string m_Path;
+    std::filesystem::path m_Path;
     MRDefSQLite::sqlite3* m_DB;
 };
 //-----------------------------------------------------------------------------

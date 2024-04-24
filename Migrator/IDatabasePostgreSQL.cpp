@@ -28,7 +28,7 @@ IDatabasePostgreSQL::~IDatabasePostgreSQL()
 std::string IDatabasePostgreSQL::GetVersion() const
 {
     int v = MRDefSingleton::Get().PostgreSQL->PQLibVersion();
-    return ISAlgorithm::StringF("%d.%d.%d", v / 10000, (v / 100) %100, v % 100);
+    return ISString::F("%d.%d.%d", v / 10000, (v / 100) %100, v % 100);
 }
 //-----------------------------------------------------------------------------
 bool IDatabasePostgreSQL::ExistsDB(bool& is_exists)
@@ -67,7 +67,7 @@ bool IDatabasePostgreSQL::Create()
         return false;
     }
 
-    MRQuery qCreate(this, ISAlgorithm::StringF("CREATE DATABASE %s WITH OWNER = %s ENCODING = 'UTF8'", m_DatabaseName.c_str(), m_User.c_str()));
+    MRQuery qCreate(this, ISString::F("CREATE DATABASE %s WITH OWNER = %s ENCODING = 'UTF8'", m_DatabaseName.c_str(), m_User.c_str()));
     if (!qCreate.Execute())
     {
         m_ErrorString = qCreate.GetErrorString();
@@ -81,7 +81,7 @@ bool IDatabasePostgreSQL::Create()
 bool IDatabasePostgreSQL::Connect()
 {
     //Формируем строку подключения
-    std::string connection_string = ISAlgorithm::StringF("host=%s port=%d dbname=%s user=%s password=%s connect_timeout=3 application_name=Migrator",
+    std::string connection_string = ISString::F("host=%s port=%d dbname=%s user=%s password=%s connect_timeout=3 application_name=Migrator",
         m_Host.c_str(), m_Port, (m_UseSystemDB ? m_SystemDBName : m_DatabaseName).c_str(), m_User.c_str(), m_Password.c_str());
 
     auto ping = MRDefSingleton::Get().PostgreSQL->PQping(connection_string.c_str());
@@ -226,7 +226,7 @@ bool IDatabasePostgreSQL::TableUpdate(const TMetaTable* meta_table)
         const char* field_name = qSelect.ReadColumn(0);
         if (!meta_table->GetField(field_name))
         {
-            MRQuery qDrop(this, ISAlgorithm::StringF("ALTER TABLE %s DROP COLUMN %s",
+            MRQuery qDrop(this, ISString::F("ALTER TABLE %s DROP COLUMN %s",
                 meta_table->Name.c_str(), field_name));
             if (!qDrop.Execute())
             {
@@ -283,10 +283,10 @@ bool IDatabasePostgreSQL::TableUpdate(const TMetaTable* meta_table)
             std::string using_type = meta_field->Type;
             if (size_t pos = using_type.find("("); pos != std::string::npos)
             {
-                using_type = ISAlgorithm::StringLeft(using_type, pos);
+                using_type = ISString::Left(using_type, pos);
             }
 
-            MRQuery qAlterType(this, ISAlgorithm::StringF("ALTER TABLE \"%s\" ALTER COLUMN \"%s\" TYPE %s USING(%s::%s)",
+            MRQuery qAlterType(this, ISString::F("ALTER TABLE \"%s\" ALTER COLUMN \"%s\" TYPE %s USING(%s::%s)",
                 meta_table->Name.c_str(), meta_field->Name.c_str(), meta_field->Type.c_str(), meta_field->Name.c_str(), using_type.c_str()));
             if (!qAlterType.Execute())
             {
@@ -305,7 +305,7 @@ bool IDatabasePostgreSQL::TableUpdate(const TMetaTable* meta_table)
 
         if (field_not_null != meta_field->NotNull)
         {
-            MRQuery qAlterNotNull(this, ISAlgorithm::StringF("ALTER TABLE \"%s\" ALTER COLUMN \"%s\" %s NOT NULL",
+            MRQuery qAlterNotNull(this, ISString::F("ALTER TABLE \"%s\" ALTER COLUMN \"%s\" %s NOT NULL",
                 meta_table->Name.c_str(), meta_field->Name.c_str(), (meta_field->NotNull ? "SET" : "DROP")));
             if (!qAlterNotNull.Execute())
             {
@@ -480,7 +480,7 @@ bool IDatabasePostgreSQL::ForeignCreate(const TMetaForeign* meta_foreign)
 //-----------------------------------------------------------------------------
 bool IDatabasePostgreSQL::ForeignUpdate(const TMetaForeign* meta_foreign)
 {
-    MRQuery qDrop(this, ISAlgorithm::StringF("ALTER TABLE %s DROP CONSTRAINT %s RESTRICT",
+    MRQuery qDrop(this, ISString::F("ALTER TABLE %s DROP CONSTRAINT %s RESTRICT",
         meta_foreign->TableName.c_str(), meta_foreign->Name.c_str()));
     if (!qDrop.Execute())
     {

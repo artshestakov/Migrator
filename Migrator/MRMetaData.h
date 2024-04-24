@@ -25,7 +25,7 @@ public:
     bool Init(const ISVectorString& path_list);
 
 private:
-    bool InitFile(const std::string& file_path);
+    bool InitFile(const std::filesystem::path& file_path);
     bool InitContent(const char* content, size_t size);
     bool InitExecute(tinyxml2::XMLElement* xml_execute);
     bool InitTable(tinyxml2::XMLElement* xml_table);
@@ -49,7 +49,7 @@ private:
 
 private:
     std::string m_ErrorString;
-    std::string m_CurrentFilePath;
+    std::filesystem::path m_CurrentFilePath;
 
     std::vector<const TMetaExecute*> m_Executes;
     std::vector<const TMetaTable*> m_Tables;
