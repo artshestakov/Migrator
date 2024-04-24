@@ -3,6 +3,10 @@
 #include "ISAlgorithm.h"
 #include <argparse.hpp>
 #include "tinyxml2.h"
+#include "ISHash.h"
+#include "ISString.h"
+#include "ISFile.h"
+#include "ISDir.h"
 //-----------------------------------------------------------------------------
 std::string error_string;
 //-----------------------------------------------------------------------------
@@ -74,14 +78,14 @@ int main(int argc, char** argv)
         {
             //Вытаскиваем подписываемую часть
             content = content.substr(p + 1, content.size() - p - 1);
-            sign = ISAlgorithm::StringToSHA(ISAlgorithm::SHAType::SHA512, content);
+            sign = ISHash::StringToSHA(ISHash::SHAType::SHA512, content);
         }
         else //Подпись не нашли - подписываем
         {
-            sign = ISAlgorithm::StringToSHA(ISAlgorithm::SHAType::SHA512, content);
+            sign = ISHash::StringToSHA(ISHash::SHAType::SHA512, content);
         }
 
-        std::string tmp_path = file_info.PathFull + ".tmp";
+        std::string tmp_path = file_info.PathFull.u8string() + ".tmp";
         std::ofstream file_out(tmp_path);
         if (!file_out.is_open())
         {
@@ -89,13 +93,13 @@ int main(int argc, char** argv)
             return EXIT_FAILURE;
         }
 
-        file_out << ISAlgorithm::StringF("<!--%s-->", sign.c_str()) << std::endl << content;
+        file_out << ISString::F("<!--%s-->", sign.c_str()) << std::endl << content;
         file_out.close();
 
         //Переименовываем файл в исходный (с заменой)
-        if (!ISAlgorithm::FileMove(tmp_path, file_info.PathFull, &error_string))
+        if (!ISFile::Move(tmp_path, file_info.PathFull, &error_string))
         {
-            std::cout << ISAlgorithm::StringF("Can't rename file from \"%s\" to \"%s\": %s",
+            std::cout << ISString::F("Can't rename file from \"%s\" to \"%s\": %s",
                 tmp_path.c_str(), file_info.PathFull.c_str(), error_string.c_str()) << std::endl;
             return EXIT_FAILURE;
         }
@@ -120,18 +124,18 @@ bool GetFileList(const ISVectorString& path_list, std::vector<ISFileInfo>& files
         bool is_dir = std::filesystem::is_directory(path, ec);
         if (ec)
         {
-            std::cout << ISAlgorithm::StringF("Can't check path \"%s\": %s",
+            std::cout << ISString::F("Can't check path \"%s\": %s",
                 path.c_str(), ec.message().c_str()) << std::endl;
             return false;
         }
 
         if (is_dir) //Если путь ведёт к директории - вытаскиваем все из неё
         {
-            auto l = ISAlgorithm::DirFiles(true, path, &error_string,
-                ISAlgorithm::DirFileSorting::DoNotSort, ISAlgorithm::SortingOrder::Ascending, { "smd" });
+            auto l = ISDir::Files(true, path, &error_string,
+                ISDir::DirFileSorting::DoNotSort, ISDir::SortingOrder::Ascending, { "smd" });
             if (l.empty())
             {
-                std::cout << ISAlgorithm::StringF("Can't read directory \"%s\": %s", path.c_str(), error_string.c_str()) << std::endl;
+                std::cout << ISString::F("Can't read directory \"%s\": %s", path.c_str(), error_string.c_str()) << std::endl;
                 return false;
             }
             files.insert(files.end(), l.begin(), l.end());
