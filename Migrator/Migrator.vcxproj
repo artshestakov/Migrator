@@ -55,13 +55,7 @@
     <ClInclude Include="TMetaClass.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Migrator.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\resources\PostgreSQL.smd" />
-    <None Include="..\resources\SQLite.smd" />
     <None Include="..\resources\Template.smd" />
-    <None Include="..\resources\Transit.smd" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

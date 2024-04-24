@@ -120,21 +120,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Migrator.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\resources\PostgreSQL.smd">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\resources\SQLite.smd">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="..\resources\Template.smd">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\resources\Transit.smd">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
