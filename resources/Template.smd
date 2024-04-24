@@ -3,7 +3,7 @@
 
     <Execute Name="uuid_generate_v4" Comment="Функция для генерации UID 4й версии">
         <![CDATA[
-            CREATE OR REPLACE FUNCTION public.uuid_generate_v4()
+            CREATE OR REPLACE FUNCTION uuid_generate_v4()
             RETURNS uuid LANGUAGE 'plpgsql' VOLATILE RETURNS NULL ON NULL INPUT
             SECURITY INVOKER PARALLEL UNSAFE COST 100 AS
             $body$
@@ -11,8 +11,6 @@
                 RETURN md5(random()::TEXT || clock_timestamp()::TEXT)::UUID;
             END;
             $body$;
-
-            COMMENT ON FUNCTION public.uuid_generate_v4() IS 'Генерация уникального идентификатора UID 4й версии';
         ]]>
     </Execute>
 
@@ -52,4 +50,11 @@
             <Field Name="Name" Type="VARCHAR(32)" Comment="Наименование"/>
         </Fields>
     </Table>
+
+    <View Name="" Comment="">
+        <![CDATA[
+            --SELECT query for view here...
+        ]]>
+    </View>
+
 </SMD>
