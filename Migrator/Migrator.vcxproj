@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src_share\MRConstants.cpp" />
     <ClCompile Include="IDatabase.cpp" />
     <ClCompile Include="IDatabasePostgreSQL.cpp" />
     <ClCompile Include="IDatabaseSQLite.cpp" />

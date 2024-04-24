@@ -1,6 +1,6 @@
 #pragma once
 //-----------------------------------------------------------------------------
-#include <..\..\LibraryExt\ISCore\argparse.hpp>
+#include <argparse.hpp>
 #include "MRDatabase.h"
 //-----------------------------------------------------------------------------
 class MRMigrator

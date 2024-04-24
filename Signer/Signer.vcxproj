@@ -22,7 +22,6 @@
     <ResourceCompile Include="Signer.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src_share\MRConstants.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -65,9 +65,6 @@
     <ClCompile Include="MRUtils.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="..\src_share\MRConstants.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
     <ClCompile Include="MRSQLProcessor.cpp">
       <Filter>Database</Filter>
     </ClCompile>
