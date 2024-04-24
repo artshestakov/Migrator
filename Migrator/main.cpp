@@ -13,6 +13,7 @@ int main(int argc, char** argv)
         std::cout << ISLogger::Instance().GetErrorString() << std::endl;
         return EXIT_FAILURE;
     }
+    ISLogger::Instance().SetReleaseOutput(true);
 
     //Установим кодировку
     std::string e;
