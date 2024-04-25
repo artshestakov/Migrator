@@ -24,11 +24,13 @@ add_executable(Migrator
 if (WIN32)
     target_link_libraries(Migrator PRIVATE
         ${CMAKE_BINARY_DIR}/bin/Release/ISCore.lib
+        ${CMAKE_BINARY_DIR}/bin/Release/ISDatabase.lib
     )
 endif()
 
 target_include_directories(Migrator PRIVATE
     ${CMAKE_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../LibraryExt/ISCore
+    ${CMAKE_CURRENT_SOURCE_DIR}/../LibraryExt/ISDatabase
     ${CMAKE_CURRENT_SOURCE_DIR}/../src_share
 )
