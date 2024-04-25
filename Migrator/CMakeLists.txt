@@ -16,22 +16,9 @@ endif()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(Migrator
-    IDatabase.cpp
-    IDatabasePostgreSQL.cpp
-    IDatabaseSQLite.cpp
-    IQuery.cpp
-    IQueryPostgreSQL.cpp
-    IQuerySQLite.cpp
     main.cpp
-    MRDatabase.cpp
-    MRDefDatabase.cpp
-    MRMetaData.cpp
     MRMigrator.cpp
-    MRQuery.cpp
-    MRSQLProcessor.cpp
-    MRTemplate.cpp
     MRUtils.cpp
-    TMetaClass.cpp
 )
 
 if (WIN32)

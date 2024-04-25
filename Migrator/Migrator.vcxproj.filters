@@ -9,104 +9,20 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Database">
-      <UniqueIdentifier>{c94131dc-2962-4196-809c-67830eab83df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Query">
-      <UniqueIdentifier>{8a1f3c3c-d5dc-4f97-9461-44a2d3142844}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Meta data">
-      <UniqueIdentifier>{4384f4b0-1963-4cfa-9d05-6445474b9497}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="IDatabase.cpp">
-      <Filter>Database</Filter>
-    </ClCompile>
-    <ClCompile Include="IDatabasePostgreSQL.cpp">
-      <Filter>Database</Filter>
-    </ClCompile>
-    <ClCompile Include="IDatabaseSQLite.cpp">
-      <Filter>Database</Filter>
-    </ClCompile>
-    <ClCompile Include="MRDatabase.cpp">
-      <Filter>Database</Filter>
-    </ClCompile>
-    <ClCompile Include="MRDefDatabase.cpp">
-      <Filter>Database</Filter>
-    </ClCompile>
-    <ClCompile Include="MRMetaData.cpp">
-      <Filter>Meta data</Filter>
-    </ClCompile>
-    <ClCompile Include="TMetaClass.cpp">
-      <Filter>Meta data</Filter>
-    </ClCompile>
-    <ClCompile Include="IQuery.cpp">
-      <Filter>Query</Filter>
-    </ClCompile>
-    <ClCompile Include="IQueryPostgreSQL.cpp">
-      <Filter>Query</Filter>
-    </ClCompile>
-    <ClCompile Include="IQuerySQLite.cpp">
-      <Filter>Query</Filter>
-    </ClCompile>
-    <ClCompile Include="MRQuery.cpp">
-      <Filter>Query</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="MRMigrator.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="MRTemplate.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
     <ClCompile Include="MRUtils.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="MRSQLProcessor.cpp">
-      <Filter>Database</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IDatabase.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="IDatabasePostgreSQL.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="IDatabaseSQLite.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="MRDatabase.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="MRDefDatabase.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="MRMetaData.h">
-      <Filter>Meta data</Filter>
-    </ClInclude>
-    <ClInclude Include="TMetaClass.h">
-      <Filter>Meta data</Filter>
-    </ClInclude>
-    <ClInclude Include="IQuery.h">
-      <Filter>Query</Filter>
-    </ClInclude>
-    <ClInclude Include="IQueryPostgreSQL.h">
-      <Filter>Query</Filter>
-    </ClInclude>
-    <ClInclude Include="IQuerySQLite.h">
-      <Filter>Query</Filter>
-    </ClInclude>
-    <ClInclude Include="MRQuery.h">
-      <Filter>Query</Filter>
-    </ClInclude>
     <ClInclude Include="MRMigrator.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="MRTemplate.h">
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="MRUtils.h">
@@ -114,9 +30,6 @@
     </ClInclude>
     <ClInclude Include="..\src_share\MRConstants.h">
       <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="MRSQLProcessor.h">
-      <Filter>Database</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

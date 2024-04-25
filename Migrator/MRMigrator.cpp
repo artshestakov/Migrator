@@ -6,6 +6,7 @@
 #include "MRQuery.h"
 #include "ISLogger.h"
 #include "ISFile.h"
+#include "MRConstants.h"
 //-----------------------------------------------------------------------------
 int MRMigrator::Ping()
 {
@@ -50,7 +51,7 @@ int MRMigrator::Ping()
 //-----------------------------------------------------------------------------
 int MRMigrator::Validate(const ISVectorString& paths)
 {
-    if (!MRMetaData::Instance().Init(paths))
+    if (!MRMetaData::Instance().Init(paths, MRConstants::SIGNER_REGEXP))
     {
         ISLOGGER_E(__CLASS__, "Meta data is not init: %s", MRMetaData::Instance().GetErrorString().c_str());
         return EXIT_FAILURE;
@@ -62,7 +63,7 @@ int MRMigrator::Validate(const ISVectorString& paths)
 //-----------------------------------------------------------------------------
 int MRMigrator::Update(const ISVectorString& paths)
 {
-    if (!MRMetaData::Instance().Init(paths))
+    if (!MRMetaData::Instance().Init(paths, MRConstants::SIGNER_REGEXP))
     {
         ISLOGGER_E(__CLASS__, "Meta data is not init: %s", MRMetaData::Instance().GetErrorString().c_str());
         return EXIT_FAILURE;
@@ -230,7 +231,7 @@ int MRMigrator::ShowConfig()
 //-----------------------------------------------------------------------------
 int MRMigrator::ShowOld(const ISVectorString& paths, const argparse::ArgumentParser& show_old_command)
 {
-    if (!MRMetaData::Instance().Init(paths))
+    if (!MRMetaData::Instance().Init(paths, MRConstants::SIGNER_REGEXP))
     {
         ISLOGGER_E(__CLASS__, "Meta data is not init: %s", MRMetaData::Instance().GetErrorString().c_str());
         return EXIT_FAILURE;

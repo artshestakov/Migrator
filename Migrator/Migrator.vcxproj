@@ -19,40 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="IDatabase.cpp" />
-    <ClCompile Include="IDatabasePostgreSQL.cpp" />
-    <ClCompile Include="IDatabaseSQLite.cpp" />
-    <ClCompile Include="IQuery.cpp" />
-    <ClCompile Include="IQueryPostgreSQL.cpp" />
-    <ClCompile Include="IQuerySQLite.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MRDatabase.cpp" />
-    <ClCompile Include="MRDefDatabase.cpp" />
-    <ClCompile Include="MRMetaData.cpp" />
     <ClCompile Include="MRMigrator.cpp" />
-    <ClCompile Include="MRQuery.cpp" />
-    <ClCompile Include="MRSQLProcessor.cpp" />
-    <ClCompile Include="MRTemplate.cpp" />
     <ClCompile Include="MRUtils.cpp" />
-    <ClCompile Include="TMetaClass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src_share\MRConstants.h" />
-    <ClInclude Include="IDatabase.h" />
-    <ClInclude Include="IDatabasePostgreSQL.h" />
-    <ClInclude Include="IDatabaseSQLite.h" />
-    <ClInclude Include="IQuery.h" />
-    <ClInclude Include="IQueryPostgreSQL.h" />
-    <ClInclude Include="IQuerySQLite.h" />
-    <ClInclude Include="MRDatabase.h" />
-    <ClInclude Include="MRDefDatabase.h" />
-    <ClInclude Include="MRMetaData.h" />
     <ClInclude Include="MRMigrator.h" />
-    <ClInclude Include="MRQuery.h" />
-    <ClInclude Include="MRSQLProcessor.h" />
-    <ClInclude Include="MRTemplate.h" />
     <ClInclude Include="MRUtils.h" />
-    <ClInclude Include="TMetaClass.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\resources\Template.smd" />
