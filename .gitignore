@@ -6,3 +6,4 @@
 
 *.vcxproj.user
 CMakeLists.txt.user
+/src_share/MRVersion.h

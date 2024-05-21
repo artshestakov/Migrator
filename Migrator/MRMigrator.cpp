@@ -7,6 +7,29 @@
 #include "ISLogger.h"
 #include "ISFile.h"
 #include "MRConstants.h"
+#include "ISString.h"
+//-----------------------------------------------------------------------------
+#if __has_include("MRVersion.h")
+    #include "MRVersion.h"
+#endif
+//-----------------------------------------------------------------------------
+int MRMigrator::ShowVersion()
+{
+#ifdef VER_EXISTS
+    std::cout << ISString::F(
+        "Version: %d\n"
+        "Branch:  %s\n"
+        "Commit:  %s",
+        VER_REVISION,
+        VER_BRANCH,
+        VER_HASH
+    ) << std::endl;
+#else
+    std::cout << "Information about version is not exist. Check the build's algorithm." << std::endl;
+#endif
+
+    return EXIT_SUCCESS;
+}
 //-----------------------------------------------------------------------------
 int MRMigrator::Ping()
 {

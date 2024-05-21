@@ -22,12 +22,17 @@ int main(int argc, char** argv)
         ISLOGGER_W(__CLASS__, "Cannot changed console encoding: %s", e.c_str());
     }
 
-    argparse::ArgumentParser args("Migrator", "1.0");
+    argparse::ArgumentParser args("Migrator", std::string(), argparse::default_arguments::help);
     args.add_description("Migrator is a portable utility for upgrade database structure by SMD (Schema Meta Data) files.");
     args.add_epilog("If you have a quiestion, please contact the developer.\n"
         "  Author:   Shestakov Artem, Russia\n"
         "  Telegram: @artem_shestakov\n"
         "  Email:    art.shestakov@icloud.com");
+    args.add_argument("-v", "--version")
+        .default_value(false)
+        .help("test")
+        .implicit_value(false)
+        .nargs(0);
 
     //Пингуем БД
     argparse::ArgumentParser ping_command("ping");
@@ -94,6 +99,11 @@ int main(int argc, char** argv)
         ISLOGGER_E(__CLASS__, "Cannot parse argmuents. %s", e.what());
         std::cout << std::endl << args;
         return EXIT_FAILURE;
+    }
+
+    if (args.is_used("version"))
+    {
+        return MRMigrator::ShowVersion();
     }
 
     //Инициализируем конфигурационный файл

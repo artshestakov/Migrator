@@ -6,6 +6,7 @@
 class MRMigrator
 {
 public:
+    static int ShowVersion();
     static int Ping();
     static int Validate(const ISVectorString& paths);
     static int Update(const ISVectorString &paths);

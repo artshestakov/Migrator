@@ -6,6 +6,15 @@ set(CMAKE_CXX_STANDARD 17)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+set(VER_REVISION 1 CACHE INTERNAL "Revision")
+set(VER_BRANCH branch_name CACHE INTERNAL "Branch")
+set(VER_HASH hash CACHE INTERNAL "Hash")
+
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src_share/MRVersion.h.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src_share/MRVersion.h
+)
+
 if (WIN32)
     add_definitions(
         -D_CRT_SECURE_NO_WARNINGS
