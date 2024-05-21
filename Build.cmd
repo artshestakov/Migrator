@@ -1,8 +1,13 @@
 @ECHO OFF
 
+REM Вытаскиваем информацию о будущей версии
+FOR /f %%i IN ('git --git-dir .git rev-list --count HEAD') DO SET REVISION=%%i
+FOR /f %%i IN ('git --git-dir .git rev-parse --abbrev-ref HEAD') DO SET BRANCH=%%i
+FOR /f %%i IN ('git --git-dir .git rev-parse --verify HEAD') DO SET HASH=%%i
+
 IF EXIST build RMDIR /Q /S build
 
-cmake . -B build
+cmake . -B build -DVER_REVISION=%REVISION% -DVER_BRANCH=%BRANCH% -DVER_HASH=%HASH%
 IF %errorlevel% neq 0 EXIT /b %errorlevel%
 
 cmake --build build --config Release
